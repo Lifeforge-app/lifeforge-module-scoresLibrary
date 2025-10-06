@@ -6,10 +6,12 @@
     "types": "cd client && bun tsc && cd ../server && bun tsc"
   },
   "dependencies": {
-    "@types/pdf-thumbnail": "^1.0.4",
-    "@types/pdfkit": "^0.17.3",
     "pdf-thumbnail": "^1.0.6",
-    "pdfkit": "^0.17.2"
+    "pdfkit": "^0.17.2",
+    "sharp": "^0.34.4"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/pdf-thumbnail": "^1.0.4",
+    "@types/pdfkit": "^0.17.3"
+  }
 }
