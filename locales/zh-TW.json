@@ -27,6 +27,14 @@
     "guitarWorld": "吉他世界",
     "scoresLibrary": {
       "update": "更新樂譜"
+    },
+    "collections": {
+      "create": "創建收藏",
+      "update": "更新收藏"
+    },
+    "categories": {
+      "create": "創建分類",
+      "update": "更新分類"
     }
   },
   "buttons": {
@@ -38,7 +46,10 @@
     "scoreType": "譜類型",
     "cookie": "會話 Cookie",
     "author": "作者",
-    "musicName": "音樂名稱"
+    "musicName": "音樂名稱",
+    "collectionName": "收藏名稱",
+    "categoryName": "分類名稱",
+    "categoryIcon": "分類圖標"
   },
   "items": {
     "score": "樂譜"
@@ -51,6 +62,18 @@
     "result": {
       "title": "沒有結果",
       "description": "找不到項目, 請嘗試其他關鍵字。"
+    },
+    "collections": {
+      "title": "沒有收藏",
+      "description": "點擊上方的加號按鈕創建您的第一個收藏。"
+    },
+    "authors": {
+      "title": "沒有作者",
+      "description": "作者的樂譜將顯示在這裡。"
+    },
+    "categories": {
+      "title": "沒有分類",
+      "description": "分類的樂譜將顯示在這裡。"
     }
   },
   "header": {

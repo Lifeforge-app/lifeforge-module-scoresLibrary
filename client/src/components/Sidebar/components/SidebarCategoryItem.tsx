@@ -11,7 +11,7 @@ import {
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
 
-import ModifyTypeModal from '../../modals/ModifyTypeModal'
+import ModifyCategoryModal from '../../modals/ModifyTypeModal'
 
 function SidebarTypeItem({
   data,
@@ -27,7 +27,7 @@ function SidebarTypeItem({
   const { updateFilter } = useFilter()
 
   const handleUpdate = useCallback(() => {
-    open(ModifyTypeModal, {
+    open(ModifyCategoryModal, {
       openType: 'update',
       initialData: data
     })

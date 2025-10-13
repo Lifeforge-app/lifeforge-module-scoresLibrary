@@ -27,6 +27,14 @@
     "guitarWorld": "Guitar World",
     "scoresLibrary": {
       "update": "Update Music Score"
+    },
+    "collections": {
+      "create": "Create Collection",
+      "update": "Update Collection"
+    },
+    "categories": {
+      "create": "Create Category",
+      "update": "Update Category"
     }
   },
   "buttons": {
@@ -38,7 +46,10 @@
     "scoreType": "Score Type",
     "cookie": "Session Cookie",
     "author": "Author",
-    "musicName": "Music Name"
+    "musicName": "Music Name",
+    "collectionName": "Collection Name",
+    "categoryName": "Category Name",
+    "categoryIcon": "Category Icon"
   },
   "items": {
     "score": "Music Score"
@@ -51,6 +62,18 @@
     "result": {
       "title": "No Results",
       "description": "No items found, please try other keywords."
+    },
+    "collections": {
+      "title": "No Collections",
+      "description": "Click the plus button above to create your first collection."
+    },
+    "authors": {
+      "title": "No Authors",
+      "description": "Authors of your music scores will be displayed here."
+    },
+    "categories": {
+      "title": "No Categories",
+      "description": "Click the plus button above to create your first category."
     }
   },
   "header": {

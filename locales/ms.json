@@ -27,6 +27,14 @@
     "guitarWorld": "Dunia Gitar",
     "scoresLibrary": {
       "update": "Kemas Kini Skor Muzik"
+    },
+    "collections": {
+      "create": "Cipta Koleksi",
+      "update": "Kemas Kini Koleksi"
+    },
+    "categories": {
+      "create": "Cipta Kategori",
+      "update": "Kemas Kini Kategori"
     }
   },
   "buttons": {
@@ -38,7 +46,10 @@
     "scoreType": "Jenis Skor",
     "cookie": "Kuki Sesi",
     "author": "Pengarang",
-    "musicName": "Nama Muzik"
+    "musicName": "Nama Muzik",
+    "collectionName": "Nama Koleksi",
+    "categoryName": "Nama Kategori",
+    "categoryIcon": "Ikon Kategori"
   },
   "items": {
     "score": "Skor Muzik"
@@ -51,6 +62,18 @@
     "result": {
       "title": "Tiada Keputusan",
       "description": "Tiada item ditemui, sila cuba kata kunci lain."
+    },
+    "collections": {
+      "title": "Tiada Koleksi",
+      "description": "Klik butang tambah di atas untuk mencipta koleksi pertama anda."
+    },
+    "authors": {
+      "title": "Tiada Pengarang",
+      "description": "Pengarang skor muzik anda akan dipaparkan di sini."
+    },
+    "categories": {
+      "title": "Tiada Kategori",
+      "description": "Kategori skor muzik anda akan dipaparkan di sini."
     }
   },
   "header": {

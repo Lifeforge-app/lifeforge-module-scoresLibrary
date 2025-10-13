@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from 'lifeforge-ui'
 import type { InferInput } from 'shared'
 
-function ModifyTypeModal({
+function ModifyCategoryModal({
   onClose,
   data: { openType, initialData }
 }: {
@@ -34,7 +34,7 @@ function ModifyTypeModal({
     InferInput<(typeof forgeAPI.scoresLibrary.types)[typeof openType]>['body']
   >({
     icon: openType === 'create' ? 'tabler:plus' : 'tabler:pencil',
-    title: `types.${openType}`,
+    title: `categories.${openType}`,
     namespace: 'apps.scoresLibrary',
     onClose,
     submitButton: openType
@@ -46,13 +46,13 @@ function ModifyTypeModal({
     .setupFields({
       name: {
         required: true,
-        label: 'Type Name',
+        label: 'Category Name',
         icon: 'tabler:category',
-        placeholder: 'New Type'
+        placeholder: 'New Category'
       },
       icon: {
         required: true,
-        label: 'Type Icon'
+        label: 'Category Icon'
       }
     })
     .initialData(initialData)
@@ -64,4 +64,4 @@ function ModifyTypeModal({
   return <FormModal {...formProps} />
 }
 
-export default ModifyTypeModal
+export default ModifyCategoryModal

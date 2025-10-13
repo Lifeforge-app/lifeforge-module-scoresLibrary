@@ -27,6 +27,14 @@
     "guitarWorld": "吉他世界",
     "scoresLibrary": {
       "update": "更新乐谱"
+    },
+    "collections": {
+      "create": "创建收藏",
+      "update": "更新收藏"
+    },
+    "categories": {
+      "create": "创建分类",
+      "update": "更新分类"
     }
   },
   "buttons": {
@@ -38,7 +46,10 @@
     "scoreType": "谱类型",
     "cookie": "会话 Cookie",
     "author": "作者",
-    "musicName": "音乐名称"
+    "musicName": "音乐名称",
+    "collectionName": "收藏名称",
+    "categoryName": "分类名称",
+    "categoryIcon": "分类图标"
   },
   "items": {
     "score": "乐谱"
@@ -51,6 +62,18 @@
     "result": {
       "title": "没有结果",
       "description": "找不到项目, 请尝试其他关键字。"
+    },
+    "collections": {
+      "title": "没有收藏",
+      "description": "点击上方的加号按钮创建您的第一个收藏。"
+    },
+    "authors": {
+      "title": "没有作者",
+      "description": "您的乐谱作者将显示在这里。"
+    },
+    "categories": {
+      "title": "没有分类",
+      "description": "您的乐谱分类将显示在这里。"
     }
   },
   "header": {

@@ -41,6 +41,16 @@ function Header({
         return
       }
 
+      if (
+        Array.from(files).some(
+          f => !['pdf', 'mp3', 'mscz'].includes(f.name.split('.').pop()!)
+        )
+      ) {
+        toast.error('Only PDF, MP3, and MSCZ files are allowed!')
+
+        return
+      }
+
       try {
         const taskId = await forgeAPI.scoresLibrary.entries.upload.mutate({
           files: Array.from(files)

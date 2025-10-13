@@ -2,6 +2,7 @@ import useFilter from '@/hooks/useFilter'
 import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
 import {
+  EmptyStateScreen,
   SidebarDivider,
   SidebarItem,
   SidebarTitle,
@@ -12,7 +13,7 @@ import {
 import { useMemo } from 'react'
 
 import ModifyCollectionModal from '../modals/ModifyCollectionModal'
-import ModifyTypeModal from '../modals/ModifyTypeModal'
+import ModifyCategoryModal from '../modals/ModifyTypeModal'
 import SidebarAuthorItem from './components/SidebarAuthorItem'
 import SidebarTypeItem from './components/SidebarCategoryItem'
 import SidebarCollectionItem from './components/SidebarCollectionItem'
@@ -101,9 +102,13 @@ function Sidebar() {
                     ))}
                   </>
                 ) : (
-                  <p className="text-bg-500 text-center">
-                    No collections found
-                  </p>
+                  <EmptyStateScreen
+                    smaller
+                    className="h-min"
+                    icon="tabler:folder-off"
+                    name="collections"
+                    namespace="apps.scoresLibrary"
+                  />
                 )
               }
             </WithQuery>
@@ -111,26 +116,46 @@ function Sidebar() {
             <SidebarTitle
               actionButtonIcon="tabler:plus"
               actionButtonOnClick={() => {
-                open(ModifyTypeModal, {
+                open(ModifyCategoryModal, {
                   openType: 'create'
                 })
               }}
               label="categories"
               namespace="apps.scoresLibrary"
             />
-            {sidebarData.types.map(t => (
-              <SidebarTypeItem key={t.id} data={t} isActive={type === t.id} />
-            ))}
+            {sidebarData.types.length > 0 ? (
+              sidebarData.types.map(t => (
+                <SidebarTypeItem key={t.id} data={t} isActive={type === t.id} />
+              ))
+            ) : (
+              <EmptyStateScreen
+                smaller
+                className="h-min"
+                icon="tabler:apps-off"
+                name="categories"
+                namespace="apps.scoresLibrary"
+              />
+            )}
             <SidebarDivider />
             <SidebarTitle label="authors" namespace="apps.scoresLibrary" />
-            {sortedAuthors.map(([auth, count]) => (
-              <SidebarAuthorItem
-                key={auth}
-                author={auth}
-                count={count}
-                isActive={(auth || '[na]') === author}
+            {sortedAuthors.length > 0 ? (
+              sortedAuthors.map(([auth, count]) => (
+                <SidebarAuthorItem
+                  key={auth}
+                  author={auth}
+                  count={count}
+                  isActive={(auth || '[na]') === author}
+                />
+              ))
+            ) : (
+              <EmptyStateScreen
+                smaller
+                className="h-min"
+                icon="tabler:user-off"
+                name="authors"
+                namespace="apps.scoresLibrary"
               />
-            ))}
+            )}
           </>
         )}
       </WithQuery>
