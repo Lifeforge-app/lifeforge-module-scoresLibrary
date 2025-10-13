@@ -3,12 +3,24 @@
   "version": "dev. 25w41",
   "description": "Easily save and organize your music scores.",
   "scripts": {
-    "types": "cd client && bun tsc && cd ../server && bun tsc"
+    "types": "cd client && bun tsc"
   },
   "dependencies": {
+    "@iconify/react": "^6.0.2",
+    "@tanstack/react-query": "^5.90.2",
+    "@uidotdev/usehooks": "^2.4.1",
+    "clsx": "^2.1.1",
+    "lifeforge-ui": "workspace:*",
+    "nuqs": "^2.7.1",
     "pdf-thumbnail": "^1.0.6",
     "pdfkit": "^0.17.2",
-    "sharp": "^0.34.4"
+    "react-i18next": "^16.0.0",
+    "react-toastify": "^11.0.5",
+    "shared": "workspace:*",
+    "sharp": "^0.34.4",
+    "socket.io": "^4.8.1",
+    "vite": "^7.1.9",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/pdf-thumbnail": "^1.0.4",
