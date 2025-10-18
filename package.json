@@ -16,7 +16,7 @@
     "pdf-page-counter": "^1.0.3",
     "pdf-thumbnail": "^1.0.6",
     "pdfkit": "^0.17.2",
-    "react-i18next": "^16.0.0",
+    "react-i18next": "^15.1.1",
     "react-toastify": "^11.0.5",
     "shared": "workspace:*",
     "sharp": "^0.34.4",
