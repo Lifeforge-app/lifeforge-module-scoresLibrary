@@ -5,7 +5,7 @@ import {
   parseAsStringEnum,
   useQueryState,
   useQueryStates
-} from 'nuqs'
+} from 'shared'
 
 export default function useFilter() {
   const [searchQuery, setSearchQuery] = useQueryState(
