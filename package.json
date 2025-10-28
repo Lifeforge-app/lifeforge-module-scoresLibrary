@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/pdf-thumbnail": "^1.0.4",
     "@types/pdfkit": "^0.17.3",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2"
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0"
   }
 }
