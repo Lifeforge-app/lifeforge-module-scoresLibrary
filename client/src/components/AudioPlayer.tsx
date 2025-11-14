@@ -41,7 +41,7 @@ function AudioPlayer({ url }: { url: string }) {
         className="p-2!"
         icon={(() => {
           if (audioLoading) {
-            return 'svg-spinners:180-ring'
+            return 'svg-spinners:ring-resize'
           }
 
           return isPlaying ? 'tabler:pause' : 'tabler:play'
