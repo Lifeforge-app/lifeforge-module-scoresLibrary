@@ -7,7 +7,12 @@ import z from 'zod'
 
 const list = forgeController
   .query()
-  .description('Get tabs list from Guitar World')
+  .description({
+    en: 'Get tabs from Guitar World',
+    ms: 'Dapatkan tab dari Guitar World',
+    'zh-CN': '从 Guitar World 获取吉他谱',
+    'zh-TW': '從 Guitar World 獲取吉他譜'
+  })
   .input({
     query: z.object({
       cookie: z.string(),
@@ -93,7 +98,12 @@ const list = forgeController
 
 const download = forgeController
   .mutation()
-  .description('Download a guitar tab from Guitar World')
+  .description({
+    en: 'Download tab from Guitar World',
+    ms: 'Muat turun tab dari Guitar World',
+    'zh-CN': '从 Guitar World 下载吉他谱',
+    'zh-TW': '從 Guitar World 下載吉他譜'
+  })
   .input({
     body: z.object({
       cookie: z.string(),

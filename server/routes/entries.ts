@@ -14,7 +14,12 @@ export function setLeft(value: number) {
 
 const sidebarData = forgeController
   .query()
-  .description('Get sidebar data for scores library')
+  .description({
+    en: 'Get sidebar statistics and filters',
+    ms: 'Dapatkan statistik dan penapis bar sisi',
+    'zh-CN': '获取侧边栏统计和筛选',
+    'zh-TW': '獲取側邊欄統計和篩選'
+  })
   .input({})
   .callback(async ({ pb }) => {
     const allScores = await pb.getList
@@ -57,7 +62,12 @@ const sidebarData = forgeController
 
 const list = forgeController
   .query()
-  .description('Get scores library entries')
+  .description({
+    en: 'Get scores with filters and pagination',
+    ms: 'Dapatkan skor dengan penapis dan penomboran halaman',
+    'zh-CN': '获取带筛选和分页的乐谱',
+    'zh-TW': '獲取帶篩選和分頁的樂譜'
+  })
   .input({
     query: z.object({
       page: z
@@ -157,7 +167,12 @@ const list = forgeController
 
 const random = forgeController
   .query()
-  .description('Get a random score entry')
+  .description({
+    en: 'Get a random score',
+    ms: 'Dapatkan skor rawak',
+    'zh-CN': '获取随机乐谱',
+    'zh-TW': '獲取隨機樂譜'
+  })
   .input({})
   .callback(async ({ pb }) => {
     const allScores = await pb.getFullList
@@ -169,7 +184,12 @@ const random = forgeController
 
 const upload = forgeController
   .mutation()
-  .description('Upload score files')
+  .description({
+    en: 'Upload score files',
+    ms: 'Muat naik fail skor',
+    'zh-CN': '上传乐谱文件',
+    'zh-TW': '上傳樂譜檔案'
+  })
   .input({})
   .statusCode(202)
   .media({
@@ -261,7 +281,12 @@ const upload = forgeController
 
 const update = forgeController
   .mutation()
-  .description('Update a score entry')
+  .description({
+    en: 'Update score details',
+    ms: 'Kemas kini butiran skor',
+    'zh-CN': '更新乐谱详情',
+    'zh-TW': '更新樂譜詳情'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -288,7 +313,12 @@ const update = forgeController
 
 const remove = forgeController
   .mutation()
-  .description('Delete a score entry')
+  .description({
+    en: 'Delete a score',
+    ms: 'Padam skor',
+    'zh-CN': '删除乐谱',
+    'zh-TW': '刪除樂譜'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -304,7 +334,12 @@ const remove = forgeController
 
 const toggleFavourite = forgeController
   .mutation()
-  .description('Toggle favourite status of a score entry')
+  .description({
+    en: 'Toggle favourite status',
+    ms: 'Togol status kegemaran',
+    'zh-CN': '切换收藏状态',
+    'zh-TW': '切換收藏狀態'
+  })
   .input({
     query: z.object({
       id: z.string()

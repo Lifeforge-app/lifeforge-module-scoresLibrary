@@ -4,7 +4,12 @@ import z from 'zod'
 
 const list = forgeController
   .query()
-  .description('Get all music score types')
+  .description({
+    en: 'Get all music score types',
+    ms: 'Dapatkan semua jenis skor muzik',
+    'zh-CN': '获取所有音乐乐谱类型',
+    'zh-TW': '獲取所有音樂樂譜類型'
+  })
   .input({})
   .callback(({ pb }) =>
     pb.getFullList
@@ -15,7 +20,12 @@ const list = forgeController
 
 const create = forgeController
   .mutation()
-  .description('Create a new music score type')
+  .description({
+    en: 'Create a new score type',
+    ms: 'Cipta jenis skor baharu',
+    'zh-CN': '创建新乐谱类型',
+    'zh-TW': '創建新樂譜類型'
+  })
   .input({
     body: SCHEMAS.scores_library.types.schema
   })
@@ -26,7 +36,12 @@ const create = forgeController
 
 const update = forgeController
   .mutation()
-  .description('Update an existing music score type')
+  .description({
+    en: 'Update score type details',
+    ms: 'Kemas kini butiran jenis skor',
+    'zh-CN': '更新乐谱类型详情',
+    'zh-TW': '更新樂譜類型詳情'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -39,7 +54,12 @@ const update = forgeController
 
 const remove = forgeController
   .mutation()
-  .description('Delete a music score type')
+  .description({
+    en: 'Delete a score type',
+    ms: 'Padam jenis skor',
+    'zh-CN': '删除乐谱类型',
+    'zh-TW': '刪除樂譜類型'
+  })
   .input({
     query: z.object({
       id: z.string()
