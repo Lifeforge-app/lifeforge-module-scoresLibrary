@@ -11,7 +11,7 @@ function ScoreList({
 }: {
   data: ScoreLibraryGuitarWorldResponse | 'loading' | 'error'
   page: number
-  setPage: (page: number) => void
+  setPage: React.Dispatch<React.SetStateAction<number>>
   cookie: string
 }) {
   if (data === 'loading') {
