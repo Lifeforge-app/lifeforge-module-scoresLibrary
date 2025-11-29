@@ -243,7 +243,7 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_pH5I',
+          id: '_clone_oYke',
           max: 0,
           min: 0,
           name: 'name',
@@ -370,7 +370,7 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_gumr',
+          id: '_clone_3PpB',
           max: 0,
           min: 0,
           name: 'name',
@@ -384,7 +384,7 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_ajnu',
+          id: '_clone_8phe',
           max: 0,
           min: 0,
           name: 'icon',
@@ -493,7 +493,7 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_catE',
+          id: '_clone_ijiy',
           max: 0,
           min: 0,
           name: 'name',
