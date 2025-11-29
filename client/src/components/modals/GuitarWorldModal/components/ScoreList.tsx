@@ -25,7 +25,7 @@ function ScoreList({
   return (
     <>
       <Pagination
-        currentPage={page}
+        page={page}
         totalPages={Math.ceil(data.totalItems / data.perPage)}
         onPageChange={setPage}
       />
@@ -35,7 +35,7 @@ function ScoreList({
         ))}
       </ul>
       <Pagination
-        currentPage={page}
+        page={page}
         totalPages={Math.ceil(data.totalItems / data.perPage)}
         onPageChange={setPage}
       />

@@ -37,8 +37,8 @@ function SortBySelector() {
         </div>
       }
       className="component-bg-with-hover! w-full min-w-56 md:w-min"
-      setValue={value => updateFilter('sort', value)}
       value={sort}
+      onChange={value => updateFilter('sort', value)}
     >
       {SORT_TYPE.map(([icon, value]) => (
         <ListboxOption

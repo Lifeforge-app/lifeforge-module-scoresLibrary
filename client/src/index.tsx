@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query'
 import { useDebounce } from '@uidotdev/usehooks'
 import {
   ContentWrapperWithSidebar,
-  HeaderFilter,
   LayoutWithSidebar,
   Pagination,
   Scrollbar,
+  TagsFilter,
   WithQuery
 } from 'lifeforge-ui'
 import { useModalStore } from 'lifeforge-ui'
@@ -95,8 +95,8 @@ function ScoresLibrary() {
         <Sidebar />
         <ContentWrapperWithSidebar>
           <InnerHeader totalItemsCount={entriesQuery.data?.totalItems ?? 0} />
-          <HeaderFilter
-            items={{
+          <TagsFilter
+            availableFilters={{
               type: {
                 data: typesQuery.data ?? []
               },
@@ -114,15 +114,15 @@ function ScoresLibrary() {
                 data: collectionsQuery.data ?? []
               }
             }}
-            setValues={{
-              type: value => updateFilter('category', value),
-              author: value => updateFilter('author', value),
-              collection: value => updateFilter('collection', value)
-            }}
             values={{
               type: category,
               author,
               collection
+            }}
+            onChange={{
+              type: value => updateFilter('category', value),
+              author: value => updateFilter('author', value),
+              collection: value => updateFilter('collection', value)
             }}
           />
           <Searchbar />
@@ -131,18 +131,17 @@ function ScoresLibrary() {
               <Scrollbar className="mt-6">
                 <Pagination
                   className="mb-3"
-                  currentPage={entries.page}
+                  page={entries.page}
                   totalPages={entries.totalPages}
                   onPageChange={page => updateFilter('page', page)}
                 />
                 <Views
-                  debouncedSearchQuery={debouncedSearchQuery}
                   entries={entries.items}
                   totalItems={entries.totalItems}
                 />
                 <Pagination
                   className="mt-3 mb-6"
-                  currentPage={entries.page}
+                  page={entries.page}
                   totalPages={entries.totalPages}
                   onPageChange={page => updateFilter('page', page)}
                 />

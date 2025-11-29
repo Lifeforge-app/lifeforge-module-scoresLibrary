@@ -45,17 +45,17 @@ function Searchbar() {
         className="bg-bg-50"
         namespace="apps.scoresLibrary"
         searchTarget="score"
-        setValue={setSearchQuery}
         value={searchQuery}
+        onChange={setSearchQuery}
       />
       <ViewModeSelector
         className="bg-bg-50 hidden md:flex"
+        currentMode={view}
         options={[
           { value: 'list', icon: 'uil:list-ul' },
           { value: 'grid', icon: 'uil:apps' }
         ]}
-        setViewMode={mode => updateFilter('view', mode)}
-        viewMode={view}
+        onModeChange={mode => updateFilter('view', mode)}
       />
     </div>
   )

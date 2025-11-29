@@ -4,10 +4,10 @@ import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
+  Card,
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
-  ItemWrapper,
   useModalStore
 } from 'lifeforge-ui'
 import { useCallback, useMemo } from 'react'
@@ -89,7 +89,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   }, [entry])
 
   return (
-    <ItemWrapper
+    <Card
       key={entry.id}
       as="a"
       href={
@@ -198,7 +198,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
           )}
         </div>
       </div>
-    </ItemWrapper>
+    </Card>
   )
 }
 

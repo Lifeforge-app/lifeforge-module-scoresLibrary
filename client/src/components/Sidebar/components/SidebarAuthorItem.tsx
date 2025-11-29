@@ -18,7 +18,6 @@ function SidebarAuthorItem({
   return (
     <SidebarItem
       active={isActive}
-      autoActive={false}
       icon="tabler:user"
       label={author || t('unknownAuthor')}
       number={count}

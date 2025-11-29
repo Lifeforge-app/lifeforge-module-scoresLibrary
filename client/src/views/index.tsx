@@ -7,11 +7,9 @@ import ListView from './ListView'
 
 function Views({
   entries,
-  debouncedSearchQuery,
   totalItems
 }: {
   entries: ScoreLibraryEntry[]
-  debouncedSearchQuery: string
   totalItems: number
 }) {
   const { view } = useFilter()
@@ -25,8 +23,10 @@ function Views({
     return (
       <EmptyStateScreen
         icon="tabler:music-off"
-        name={debouncedSearchQuery.trim() === '' ? 'score' : 'result'}
-        namespace="apps.scoresLibrary"
+        message={{
+          id: 'score',
+          namespace: 'apps.scoresLibrary'
+        }}
       />
     )
   }

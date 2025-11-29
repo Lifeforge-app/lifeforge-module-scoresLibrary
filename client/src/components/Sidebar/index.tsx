@@ -77,11 +77,13 @@ function Sidebar() {
             />
             <SidebarDivider />
             <SidebarTitle
-              actionButtonIcon="tabler:plus"
-              actionButtonOnClick={() => {
-                open(ModifyCollectionModal, {
-                  type: 'create'
-                })
+              actionButton={{
+                icon: 'tabler:plus',
+                onClick: () => {
+                  open(ModifyCollectionModal, {
+                    type: 'create'
+                  })
+                }
               }}
               label="collections"
               namespace="apps.scoresLibrary"
@@ -106,19 +108,23 @@ function Sidebar() {
                     smaller
                     className="h-min"
                     icon="tabler:folder-off"
-                    name="collections"
-                    namespace="apps.scoresLibrary"
+                    message={{
+                      id: 'collections',
+                      namespace: 'apps.scoresLibrary'
+                    }}
                   />
                 )
               }
             </WithQuery>
             <SidebarDivider />
             <SidebarTitle
-              actionButtonIcon="tabler:plus"
-              actionButtonOnClick={() => {
-                open(ModifyCategoryModal, {
-                  openType: 'create'
-                })
+              actionButton={{
+                icon: 'tabler:plus',
+                onClick: () => {
+                  open(ModifyCategoryModal, {
+                    openType: 'create'
+                  })
+                }
               }}
               label="categories"
               namespace="apps.scoresLibrary"
@@ -132,8 +138,10 @@ function Sidebar() {
                 smaller
                 className="h-min"
                 icon="tabler:apps-off"
-                name="categories"
-                namespace="apps.scoresLibrary"
+                message={{
+                  id: 'categories',
+                  namespace: 'apps.scoresLibrary'
+                }}
               />
             )}
             <SidebarDivider />
@@ -152,8 +160,10 @@ function Sidebar() {
                 smaller
                 className="h-min"
                 icon="tabler:user-off"
-                name="authors"
-                namespace="apps.scoresLibrary"
+                message={{
+                  id: 'authors',
+                  namespace: 'apps.scoresLibrary'
+                }}
               />
             )}
           </>

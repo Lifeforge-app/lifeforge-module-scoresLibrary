@@ -83,8 +83,8 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
             label="cookie"
             namespace="apps.scoresLibrary"
             placeholder="Cookie from Guitar World"
-            setValue={setCookie}
             value={cookie}
+            onChange={setCookie}
           />
           <Button
             className="mt-4 w-full"
