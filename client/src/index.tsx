@@ -98,20 +98,30 @@ function ScoresLibrary() {
           <TagsFilter
             availableFilters={{
               type: {
-                data: typesQuery.data ?? []
+                data:
+                  typesQuery.data?.map(type => ({
+                    id: type.id,
+                    label: type.name,
+                    icon: type.icon
+                  })) ?? []
               },
               author: {
                 data:
                   Object.keys(sidebarDataQuery.data?.authors ?? {}).map(
                     author => ({
                       id: author,
-                      name: author,
+                      label: author,
                       icon: 'tabler:user'
                     })
                   ) ?? []
               },
               collection: {
-                data: collectionsQuery.data ?? []
+                data:
+                  collectionsQuery.data?.map(collection => ({
+                    id: collection.id,
+                    label: collection.name,
+                    icon: 'tabler:books'
+                  })) ?? []
               }
             }}
             values={{
