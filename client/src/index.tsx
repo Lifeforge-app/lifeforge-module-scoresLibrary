@@ -1,6 +1,5 @@
 import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
-import { useDebounce } from '@uidotdev/usehooks'
 import {
   ContentWrapperWithSidebar,
   LayoutWithSidebar,
@@ -53,13 +52,11 @@ function ScoresLibrary() {
     updateFilter
   } = useFilter()
 
-  const debouncedSearchQuery = useDebounce(searchQuery.trim(), 300)
-
   const entriesQuery = useQuery(
     forgeAPI.scoresLibrary.entries.list
       .input({
         page: page.toString(),
-        query: debouncedSearchQuery,
+        query: searchQuery.trim(),
         category: category ? category : undefined,
         collection: collection ? collection : undefined,
         starred: starred ? 'true' : 'false',
@@ -83,7 +80,7 @@ function ScoresLibrary() {
 
   useEffect(() => {
     updateFilter('page', 1)
-  }, [debouncedSearchQuery, category, collection, starred, author, sort])
+  }, [searchQuery, category, collection, starred, author, sort])
 
   return (
     <>
