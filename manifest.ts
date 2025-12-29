@@ -5,7 +5,7 @@ export default {
   name: 'Scores Library',
   icon: 'tabler:file-music',
   routes: {
-    '/': lazy(() => import('./src'))
+    '/': lazy(() => import('@'))
   },
   category: 'Storage'
 } satisfies ModuleConfig

@@ -18,7 +18,6 @@ const scoresLibrarySchemas = {
       updated: z.string()
     }),
     raw: {
-      id: '9agm22e3g44cdk8',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: '@request.auth.id != ""',
@@ -30,7 +29,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '[a-z0-9]{15}',
           hidden: false,
-          id: 'text3208210256',
           max: 15,
           min: 15,
           name: 'id',
@@ -44,7 +42,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'cgqi62gp',
           max: 0,
           min: 0,
           name: 'name',
@@ -57,9 +54,8 @@ const scoresLibrarySchemas = {
         },
         {
           cascadeDelete: false,
-          collectionId: 'pbc_960559984',
+          collectionId: 'scores_library__types',
           hidden: false,
-          id: 'relation2363381545',
           maxSelect: 1,
           minSelect: 0,
           name: 'type',
@@ -71,7 +67,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'vojkjqoz',
           max: 0,
           min: 0,
           name: 'pageCount',
@@ -84,7 +79,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'tb4by8gi',
           maxSelect: 1,
           maxSize: 5242880,
           mimeTypes: [],
@@ -99,7 +93,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'cu4e2kos',
           max: 0,
           min: 0,
           name: 'author',
@@ -112,7 +105,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'hv0nhz4n',
           maxSelect: 1,
           maxSize: 52428800,
           mimeTypes: null,
@@ -126,7 +118,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: '0luzezpe',
           maxSelect: 1,
           maxSize: 52428800,
           mimeTypes: ['audio/mpeg'],
@@ -140,7 +131,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'unlycjbb',
           maxSelect: 1,
           maxSize: 52428800,
           mimeTypes: null,
@@ -154,7 +144,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'zglxrk9r',
           name: 'isFavourite',
           presentable: false,
           required: false,
@@ -163,9 +152,8 @@ const scoresLibrarySchemas = {
         },
         {
           cascadeDelete: false,
-          collectionId: 'pbc_1328318918',
+          collectionId: 'scores_library__collections',
           hidden: false,
-          id: 'relation4232930610',
           maxSelect: 1,
           minSelect: 0,
           name: 'collection',
@@ -176,7 +164,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'number3959456388',
           max: null,
           min: null,
           name: 'guitar_world_id',
@@ -188,7 +175,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'autodate2990389176',
           name: 'created',
           onCreate: true,
           onUpdate: false,
@@ -198,7 +184,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'autodate3332085495',
           name: 'updated',
           onCreate: true,
           onUpdate: true,
@@ -217,7 +202,6 @@ const scoresLibrarySchemas = {
       amount: z.number()
     }),
     raw: {
-      id: 'pbc_1264004064',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: null,
@@ -229,7 +213,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text3208210256',
           max: 0,
           min: 0,
           name: 'id',
@@ -243,7 +226,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_1ggC',
           max: 0,
           min: 0,
           name: 'name',
@@ -256,7 +238,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'number2392944706',
           max: null,
           min: null,
           name: 'amount',
@@ -279,7 +260,6 @@ const scoresLibrarySchemas = {
       icon: z.string()
     }),
     raw: {
-      id: 'pbc_960559984',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: '@request.auth.id != ""',
@@ -291,7 +271,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '[a-z0-9]{15}',
           hidden: false,
-          id: 'text3208210256',
           max: 15,
           min: 15,
           name: 'id',
@@ -305,7 +284,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text1579384326',
           max: 0,
           min: 0,
           name: 'name',
@@ -319,7 +297,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text1704208859',
           max: 0,
           min: 0,
           name: 'icon',
@@ -344,7 +321,6 @@ const scoresLibrarySchemas = {
       amount: z.number()
     }),
     raw: {
-      id: 'pbc_1616642190',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: null,
@@ -356,7 +332,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text3208210256',
           max: 0,
           min: 0,
           name: 'id',
@@ -370,7 +345,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_7TE3',
           max: 0,
           min: 0,
           name: 'name',
@@ -384,7 +358,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_l4VR',
           max: 0,
           min: 0,
           name: 'icon',
@@ -397,7 +370,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'number2392944706',
           max: null,
           min: null,
           name: 'amount',
@@ -419,7 +391,6 @@ const scoresLibrarySchemas = {
       name: z.string()
     }),
     raw: {
-      id: 'pbc_1328318918',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: '@request.auth.id != ""',
@@ -431,7 +402,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '[a-z0-9]{15}',
           hidden: false,
-          id: 'text3208210256',
           max: 15,
           min: 15,
           name: 'id',
@@ -445,7 +415,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text1579384326',
           max: 0,
           min: 0,
           name: 'name',
@@ -467,7 +436,6 @@ const scoresLibrarySchemas = {
       amount: z.number()
     }),
     raw: {
-      id: 'pbc_1931113261',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: null,
@@ -479,7 +447,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text3208210256',
           max: 0,
           min: 0,
           name: 'id',
@@ -493,7 +460,6 @@ const scoresLibrarySchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: '_clone_HmGk',
           max: 0,
           min: 0,
           name: 'name',
@@ -506,7 +472,6 @@ const scoresLibrarySchemas = {
         },
         {
           hidden: false,
-          id: 'number2392944706',
           max: null,
           min: null,
           name: 'amount',
