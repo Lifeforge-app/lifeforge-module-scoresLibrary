@@ -1,6 +1,7 @@
-import { forgeController, forgeRouter } from '@functions/routes'
 import { SCHEMAS } from '@schema'
 import z from 'zod'
+
+import { forgeController, forgeRouter } from '@functions/routes'
 
 const list = forgeController
   .query()
@@ -13,7 +14,7 @@ const list = forgeController
   .input({})
   .callback(({ pb }) =>
     pb.getFullList
-      .collection('scores_library__types_aggregated')
+      .collection('scoresLibrary__types_aggregated')
       .sort(['name'])
       .execute()
   )
@@ -27,11 +28,11 @@ const create = forgeController
     'zh-TW': '創建新樂譜類型'
   })
   .input({
-    body: SCHEMAS.scores_library.types.schema
+    body: SCHEMAS.scoresLibrary.types.schema
   })
   .statusCode(201)
   .callback(({ pb, body }) =>
-    pb.create.collection('scores_library__types').data(body).execute()
+    pb.create.collection('scoresLibrary__types').data(body).execute()
   )
 
 const update = forgeController
@@ -46,10 +47,10 @@ const update = forgeController
     query: z.object({
       id: z.string()
     }),
-    body: SCHEMAS.scores_library.types.schema
+    body: SCHEMAS.scoresLibrary.types.schema
   })
   .callback(({ pb, query: { id }, body }) =>
-    pb.update.collection('scores_library__types').id(id).data(body).execute()
+    pb.update.collection('scoresLibrary__types').id(id).data(body).execute()
   )
 
 const remove = forgeController
@@ -67,7 +68,7 @@ const remove = forgeController
   })
   .statusCode(204)
   .callback(({ pb, query: { id } }) =>
-    pb.delete.collection('scores_library__types').id(id).execute()
+    pb.delete.collection('scoresLibrary__types').id(id).execute()
   )
 
 export default forgeRouter({

@@ -1,9 +1,10 @@
-import { forgeController, forgeRouter } from '@functions/routes'
-import { addToTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
 import fs from 'fs'
 import PDFDocument from 'pdfkit'
 import sharp from 'sharp'
 import z from 'zod'
+
+import { forgeController, forgeRouter } from '@functions/routes'
+import { addToTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
 
 const list = forgeController
   .query()
@@ -70,7 +71,7 @@ const list = forgeController
     const allIds = finalData.data.map(item => item.id)
 
     const existingEntries = await pb.getFullList
-      .collection('scores_library__entries')
+      .collection('scoresLibrary__entries')
       .filter([
         {
           combination: '||',
@@ -202,7 +203,7 @@ const download = forgeController
             }
 
             const newEntry = await pb.create
-              .collection('scores_library__entries')
+              .collection('scoresLibrary__entries')
               .data({
                 name,
                 author: mainArtist,

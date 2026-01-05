@@ -1,8 +1,9 @@
+import { SCHEMAS } from '@schema'
+import z from 'zod'
+
 import { forgeController, forgeRouter } from '@functions/routes'
 import { ClientError } from '@functions/routes/utils/response'
 import { addToTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
-import { SCHEMAS } from '@schema'
-import z from 'zod'
 
 import { processFiles } from '../utils/uploadFiles'
 
@@ -23,13 +24,13 @@ const sidebarData = forgeController
   .input({})
   .callback(async ({ pb }) => {
     const allScores = await pb.getList
-      .collection('scores_library__entries')
+      .collection('scoresLibrary__entries')
       .page(1)
       .perPage(1)
       .execute()
 
     const favourites = await pb.getList
-      .collection('scores_library__entries')
+      .collection('scoresLibrary__entries')
       .page(1)
       .perPage(1)
       .filter([
@@ -42,11 +43,11 @@ const sidebarData = forgeController
       .execute()
 
     const allAuthors = await pb.getFullList
-      .collection('scores_library__authors_aggregated')
+      .collection('scoresLibrary__authors_aggregated')
       .execute()
 
     const allTypes = await pb.getFullList
-      .collection('scores_library__types_aggregated')
+      .collection('scoresLibrary__types_aggregated')
       .sort(['amount', 'name'])
       .execute()
 
@@ -94,7 +95,7 @@ const list = forgeController
       query: { page, query = '', category, author, collection, starred, sort }
     }) => {
       return pb.getList
-        .collection('scores_library__entries')
+        .collection('scoresLibrary__entries')
         .page(page)
         .perPage(20)
         .filter([
@@ -176,7 +177,7 @@ const random = forgeController
   .input({})
   .callback(async ({ pb }) => {
     const allScores = await pb.getFullList
-      .collection('scores_library__entries')
+      .collection('scoresLibrary__entries')
       .execute()
 
     return allScores[Math.floor(Math.random() * allScores.length)]
@@ -291,7 +292,7 @@ const update = forgeController
     query: z.object({
       id: z.string()
     }),
-    body: SCHEMAS.scores_library.entries.schema
+    body: SCHEMAS.scoresLibrary.entries.schema
       .pick({
         name: true,
         author: true,
@@ -302,13 +303,13 @@ const update = forgeController
       })
   })
   .existenceCheck('query', {
-    id: 'scores_library__entries'
+    id: 'scoresLibrary__entries'
   })
   .existenceCheck('body', {
-    collection: '[scores_library__collections]'
+    collection: '[scoresLibrary__collections]'
   })
   .callback(({ pb, query: { id }, body }) =>
-    pb.update.collection('scores_library__entries').id(id).data(body).execute()
+    pb.update.collection('scoresLibrary__entries').id(id).data(body).execute()
   )
 
 const remove = forgeController
@@ -325,11 +326,11 @@ const remove = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'scores_library__entries'
+    id: 'scoresLibrary__entries'
   })
   .statusCode(204)
   .callback(async ({ pb, query: { id } }) =>
-    pb.delete.collection('scores_library__entries').id(id).execute()
+    pb.delete.collection('scoresLibrary__entries').id(id).execute()
   )
 
 const toggleFavourite = forgeController
@@ -346,16 +347,16 @@ const toggleFavourite = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'scores_library__entries'
+    id: 'scoresLibrary__entries'
   })
   .callback(async ({ pb, query: { id } }) => {
     const entry = await pb.getOne
-      .collection('scores_library__entries')
+      .collection('scoresLibrary__entries')
       .id(id)
       .execute()
 
     return await pb.update
-      .collection('scores_library__entries')
+      .collection('scoresLibrary__entries')
       .id(id)
       .data({
         isFavourite: !entry.isFavourite

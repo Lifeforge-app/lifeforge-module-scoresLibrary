@@ -1,10 +1,11 @@
-import { PBService } from '@functions/database'
-import { globalTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
 import fs from 'fs'
 // @ts-expect-error - No types available
 import pdfPageCounter from 'pdf-page-counter'
 import pdfThumbnail from 'pdf-thumbnail'
 import { Server } from 'socket.io'
+
+import { PBService } from '@functions/database'
+import { globalTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
 
 import { left, setLeft } from '../routes/entries'
 
@@ -72,7 +73,7 @@ export const processFiles = async (
           }
 
           await pb.create
-            .collection('scores_library__entries')
+            .collection('scoresLibrary__entries')
             .data({
               name,
               thumbnail: new File([thumbnailBuffer], `${decodedName}.jpeg`),
