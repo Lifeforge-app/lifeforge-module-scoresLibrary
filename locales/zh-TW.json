@@ -1,0 +1,92 @@
+{
+  "title": "樂譜庫",
+  "description": "輕鬆儲存和整理您的樂譜。",
+  "sidebar": {
+    "allScores": "所有樂譜",
+    "starred": "星標樂譜",
+    "singAlong": "跟唱",
+    "fingerStyle": "指彈",
+    "uncategorized": "未分類",
+    "authors": "作者",
+    "categories": "分類",
+    "collections": "收藏"
+  },
+  "scoreTypes": {
+    "singalong": "跟唱",
+    "fingerstyle": "指彈",
+    "uncategorized": "未分類"
+  },
+  "sortTypes": {
+    "newest": "最新優先",
+    "oldest": "最舊優先",
+    "author": "作者",
+    "name": "標題"
+  },
+  "unknownAuthor": "未知作者",
+  "modals": {
+    "guitarWorld": "吉他世界",
+    "scoresLibrary": {
+      "update": "更新樂譜"
+    },
+    "collections": {
+      "create": "創建收藏",
+      "update": "更新收藏"
+    },
+    "categories": {
+      "create": "創建分類",
+      "update": "更新分類"
+    }
+  },
+  "buttons": {
+    "downloadFromGuitarWorld": "從吉他世界下載",
+    "uploadFromLocal": "從本地上傳",
+    "downloadAll": "全部下載"
+  },
+  "inputs": {
+    "scoreType": "譜類型",
+    "cookie": "會話 Cookie",
+    "author": "作者",
+    "musicName": "音樂名稱",
+    "collectionName": "收藏名稱",
+    "categoryName": "分類名稱",
+    "categoryIcon": "分類圖標"
+  },
+  "items": {
+    "score": "樂譜"
+  },
+  "empty": {
+    "score": {
+      "title": "沒有樂譜",
+      "description": "您還沒有添加任何樂譜。點擊下面的按鈕添加一個。"
+    },
+    "result": {
+      "title": "沒有結果",
+      "description": "找不到項目, 請嘗試其他關鍵字。"
+    },
+    "collections": {
+      "title": "沒有收藏",
+      "description": "點擊上方的加號按鈕創建您的第一個收藏。"
+    },
+    "authors": {
+      "title": "沒有作者",
+      "description": "作者的樂譜將顯示在這裡。"
+    },
+    "categories": {
+      "title": "沒有分類",
+      "description": "分類的樂譜將顯示在這裡。"
+    }
+  },
+  "header": {
+    "allScores": "所有樂譜",
+    "filteredScores": "已篩選樂譜",
+    "starred": "已星標的"
+  },
+  "hamburgerMenu": {
+    "viewAs": "查看為",
+    "sortBy": "排序依據"
+  },
+  "viewTypes": {
+    "grid": "網格",
+    "list": "列表"
+  }
+}
