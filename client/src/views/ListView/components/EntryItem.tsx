@@ -1,6 +1,4 @@
 import type { ScoreLibraryEntry } from '@'
-import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -13,11 +11,14 @@ import {
 import { useCallback, useMemo } from 'react'
 import { toast } from 'react-toastify'
 
+import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
+import forgeAPI from '@/utils/forgeAPI'
+
 import AudioPlayer from '../../../components/AudioPlayer'
 import DownloadMenu from '../../../components/DownloadMenu'
 
 function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const queryClient = useQueryClient()
 

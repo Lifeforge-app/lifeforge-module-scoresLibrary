@@ -1,6 +1,4 @@
 import type { ScoreLibraryType } from '@'
-import useFilter from '@/hooks/useFilter'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   ConfirmationModal,
@@ -10,6 +8,9 @@ import {
 } from 'lifeforge-ui'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
+
+import useFilter from '@/hooks/useFilter'
+import forgeAPI from '@/utils/forgeAPI'
 
 import ModifyCategoryModal from '../../modals/ModifyTypeModal'
 
@@ -22,7 +23,7 @@ function SidebarTypeItem({
 }) {
   const queryClient = useQueryClient()
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const { updateFilter } = useFilter()
 

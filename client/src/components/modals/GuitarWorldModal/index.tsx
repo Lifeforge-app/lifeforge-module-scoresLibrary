@@ -1,4 +1,3 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
 import {
   Button,
@@ -12,6 +11,8 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import type { InferOutput } from 'shared'
 
+import forgeAPI from '@/utils/forgeAPI'
+
 import ScoreList from './components/ScoreList'
 
 export type ScoreLibraryGuitarWorldResponse = InferOutput<
@@ -19,7 +20,7 @@ export type ScoreLibraryGuitarWorldResponse = InferOutput<
 >
 
 function GuitarWorldModal({ onClose }: { onClose: () => void }) {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const [cookie, setCookie] = useState(
     localStorage.getItem('guitarWorldCookie') || ''

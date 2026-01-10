@@ -1,5 +1,4 @@
 import type { ScoreLibraryCollection } from '@'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   ConfirmationModal,
@@ -9,6 +8,8 @@ import {
 } from 'lifeforge-ui'
 import { useCallback } from 'react'
 import { toast } from 'react-toastify'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import ModifyCollectionModal from '../../modals/ModifyCollectionModal'
 
@@ -23,7 +24,7 @@ function SidebarCollectionItem({
 }) {
   const queryClient = useQueryClient()
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const deleteMutation = useMutation(
     forgeAPI.scoresLibrary.collections.remove

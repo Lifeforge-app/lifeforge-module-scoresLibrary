@@ -1,5 +1,3 @@
-import useFilter from '@/hooks/useFilter'
-import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
 import {
   EmptyStateScreen,
@@ -12,6 +10,9 @@ import {
 } from 'lifeforge-ui'
 import { useMemo } from 'react'
 
+import useFilter from '@/hooks/useFilter'
+import forgeAPI from '@/utils/forgeAPI'
+
 import ModifyCollectionModal from '../modals/ModifyCollectionModal'
 import ModifyCategoryModal from '../modals/ModifyTypeModal'
 import SidebarAuthorItem from './components/SidebarAuthorItem'
@@ -19,7 +20,7 @@ import SidebarTypeItem from './components/SidebarCategoryItem'
 import SidebarCollectionItem from './components/SidebarCollectionItem'
 
 function Sidebar() {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const dataQuery = useQuery(
     forgeAPI.scoresLibrary.entries.sidebarData.queryOptions()

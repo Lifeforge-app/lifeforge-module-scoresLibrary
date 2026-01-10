@@ -1,4 +1,3 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
 import {
   ContentWrapperWithSidebar,
@@ -12,12 +11,15 @@ import { useModalStore } from 'lifeforge-ui'
 import { useEffect } from 'react'
 import { type InferInput, type InferOutput } from 'shared'
 
+import forgeAPI from '@/utils/forgeAPI'
+
 import Header from './components/Header'
 import InnerHeader from './components/InnerHeader'
 import Searchbar from './components/Searchbar'
 import Sidebar from './components/Sidebar'
 import GuitarWorldModal from './components/modals/GuitarWorldModal'
 import useFilter from './hooks/useFilter'
+import './index.css'
 import Views from './views'
 
 export type ScoreLibraryEntry = InferOutput<
@@ -76,7 +78,7 @@ function ScoresLibrary() {
     forgeAPI.scoresLibrary.collections.list.queryOptions()
   )
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   useEffect(() => {
     updateFilter('page', 1)
