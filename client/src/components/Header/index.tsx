@@ -1,9 +1,10 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { useQueryClient } from '@tanstack/react-query'
 import { FAB, ModuleHeader } from 'lifeforge-ui'
 import { useCallback, useRef } from 'react'
 import { type Id, toast } from 'react-toastify'
 import { type SocketEvent, useSocketContext } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import ActionMenu from './components/ActionMenu'
 import UploadTabButton from './components/UploadTabButton'
@@ -52,7 +53,7 @@ function Header({
       }
 
       try {
-        const taskId = await forgeAPI.scoresLibrary.entries.upload.mutate({
+        const taskId = await forgeAPI.entries.upload.mutate({
           files: Array.from(files)
         })
 

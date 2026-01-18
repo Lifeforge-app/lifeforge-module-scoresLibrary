@@ -1,9 +1,10 @@
 import type { ScoreLibraryEntry } from '@'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from 'lifeforge-ui'
 import { useTranslation } from 'react-i18next'
 import type { InferInput } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 function ModifyEntryModal({
   onClose,
@@ -17,28 +18,24 @@ function ModifyEntryModal({
   const { t } = useTranslation('apps.scoresLibrary')
 
   const mutation = useMutation(
-    forgeAPI.scoresLibrary.entries.update
-      .input({ id: initialData.id })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['scoresLibrary']
-          })
-          onClose()
-        }
-      })
+    forgeAPI.entries.update.input({ id: initialData.id }).mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['scoresLibrary']
+        })
+        onClose()
+      }
+    })
   )
 
-  const typesQuery = useQuery(forgeAPI.scoresLibrary.types.list.queryOptions())
+  const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
 
-  const collectionsQuery = useQuery(
-    forgeAPI.scoresLibrary.collections.list.queryOptions()
-  )
+  const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const queryClient = useQueryClient()
 
   const { formProps } = defineForm<
-    InferInput<typeof forgeAPI.scoresLibrary.entries.update>['body']
+    InferInput<typeof forgeAPI.entries.update>['body']
   >({
     icon: 'tabler:pencil',
     title: 'scoresLibrary.update',

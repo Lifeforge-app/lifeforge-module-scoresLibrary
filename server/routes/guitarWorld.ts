@@ -3,17 +3,11 @@ import PDFDocument from 'pdfkit'
 import sharp from 'sharp'
 import z from 'zod'
 
-import { forgeController, forgeRouter } from '@functions/routes'
-import { addToTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
+import forge from '../forge'
 
-const list = forgeController
+export const list = forge
   .query()
-  .description({
-    en: 'Get tabs from Guitar World',
-    ms: 'Dapatkan tab dari Guitar World',
-    'zh-CN': '从 Guitar World 获取吉他谱',
-    'zh-TW': '從 Guitar World 獲取吉他譜'
-  })
+  .description('Get tabs from Guitar World')
   .input({
     query: z.object({
       cookie: z.string(),
@@ -71,7 +65,7 @@ const list = forgeController
     const allIds = finalData.data.map(item => item.id)
 
     const existingEntries = await pb.getFullList
-      .collection('scoresLibrary__entries')
+      .collection('entries')
       .filter([
         {
           combination: '||',
@@ -97,14 +91,9 @@ const list = forgeController
     return finalData
   })
 
-const download = forgeController
+export const download = forge
   .mutation()
-  .description({
-    en: 'Download tab from Guitar World',
-    ms: 'Muat turun tab dari Guitar World',
-    'zh-CN': '从 Guitar World 下载吉他谱',
-    'zh-TW': '從 Guitar World 下載吉他譜'
-  })
+  .description('Download tab from Guitar World')
   .input({
     body: z.object({
       cookie: z.string(),
@@ -117,8 +106,13 @@ const download = forgeController
   })
   .statusCode(202)
   .callback(
-    async ({ pb, body: { cookie, id, name, mainArtist, audioUrl }, io }) => {
-      const taskId = addToTaskPool(io, {
+    async ({
+      pb,
+      body: { cookie, id, name, mainArtist, audioUrl },
+      io,
+      core: { tasks }
+    }) => {
+      const taskId = tasks.add(io, {
         module: 'scoresLibrary',
         description: `Downloading tab ${name} (${id}) from Guitar World`,
         status: 'pending'
@@ -126,7 +120,7 @@ const download = forgeController
 
       ;(async () => {
         try {
-          updateTaskInPool(io, taskId, {
+          tasks.update(io, taskId, {
             status: 'running',
             progress: 0
           })
@@ -203,7 +197,7 @@ const download = forgeController
             }
 
             const newEntry = await pb.create
-              .collection('scoresLibrary__entries')
+              .collection('entries')
               .data({
                 name,
                 author: mainArtist,
@@ -225,13 +219,13 @@ const download = forgeController
             fs.rmdirSync(folder, { recursive: true })
             fs.unlinkSync(`./medium/${id}.pdf`)
 
-            updateTaskInPool(io, taskId, {
+            tasks.update(io, taskId, {
               status: 'completed',
               data: newEntry
             })
           })
         } catch (error) {
-          updateTaskInPool(io, taskId, {
+          tasks.update(io, taskId, {
             status: 'failed',
             error: error instanceof Error ? error.message : 'Unknown error'
           })
@@ -241,8 +235,3 @@ const download = forgeController
       return taskId
     }
   )
-
-export default forgeRouter({
-  list,
-  download
-})

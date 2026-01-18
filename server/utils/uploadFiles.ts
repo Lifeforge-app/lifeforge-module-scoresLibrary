@@ -4,23 +4,25 @@ import pdfPageCounter from 'pdf-page-counter'
 import pdfThumbnail from 'pdf-thumbnail'
 import { Server } from 'socket.io'
 
-import { PBService } from '@functions/database'
-import { globalTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
+let left = 0
 
-import { left, setLeft } from '../routes/entries'
+export function setLeft(value: number) {
+  left = value
+}
 
 export const processFiles = async (
-  pb: PBService,
+  pb: any,
   groups: Record<
     string,
     {
-      pdf: Express.Multer.File | null
-      mscz: Express.Multer.File | null
-      mp3: Express.Multer.File | null
+      pdf: any | null
+      mscz: any | null
+      mp3: any | null
     }
   >,
   io: Server,
-  taskId: string
+  taskId: string,
+  tasks: any
 ) => {
   for (let groupIdx = 0; groupIdx < Object.keys(groups).length; groupIdx++) {
     try {
@@ -73,7 +75,7 @@ export const processFiles = async (
           }
 
           await pb.create
-            .collection('scoresLibrary__entries')
+            .collection('entries')
             .data({
               name,
               thumbnail: new File([thumbnailBuffer], `${decodedName}.jpeg`),
@@ -84,18 +86,18 @@ export const processFiles = async (
             })
             .execute()
 
-          if (!(globalTaskPool[taskId].progress instanceof Object)) {
+          if (!(tasks.global[taskId].progress instanceof Object)) {
             return
           }
 
           setLeft(left - 1)
 
           if (left === 0) {
-            updateTaskInPool(io, taskId, {
+            tasks.update(io, taskId, {
               status: 'completed'
             })
           } else {
-            updateTaskInPool(io, taskId, {
+            tasks.update(io, taskId, {
               status: 'running',
               progress: {
                 left,
@@ -106,7 +108,7 @@ export const processFiles = async (
         })
     } catch (err) {
       console.error('Error processing group:', err)
-      updateTaskInPool(io, taskId, {
+      tasks.update(io, taskId, {
         status: 'failed',
         error: err instanceof Error ? err.message : 'Unknown error'
       })

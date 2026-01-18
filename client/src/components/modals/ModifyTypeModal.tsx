@@ -1,8 +1,9 @@
 import type { ScoreLibraryType } from '@'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from 'lifeforge-ui'
 import type { InferInput } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 function ModifyCategoryModal({
   onClose,
@@ -18,8 +19,8 @@ function ModifyCategoryModal({
 
   const mutation = useMutation(
     (openType === 'create'
-      ? forgeAPI.scoresLibrary.types.create
-      : forgeAPI.scoresLibrary.types.update.input({
+      ? forgeAPI.types.create
+      : forgeAPI.types.update.input({
           id: initialData?.id || ''
         })
     ).mutationOptions({
@@ -31,7 +32,7 @@ function ModifyCategoryModal({
   )
 
   const { formProps } = defineForm<
-    InferInput<(typeof forgeAPI.scoresLibrary.types)[typeof openType]>['body']
+    InferInput<(typeof forgeAPI.types)[typeof openType]>['body']
   >({
     icon: openType === 'create' ? 'tabler:plus' : 'tabler:pencil',
     title: `categories.${openType}`,

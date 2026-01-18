@@ -22,9 +22,7 @@ import SidebarCollectionItem from './components/SidebarCollectionItem'
 function Sidebar() {
   const { open } = useModalStore()
 
-  const dataQuery = useQuery(
-    forgeAPI.scoresLibrary.entries.sidebarData.queryOptions()
-  )
+  const dataQuery = useQuery(forgeAPI.entries.sidebarData.queryOptions())
 
   const {
     author,
@@ -34,9 +32,7 @@ function Sidebar() {
     updateFilter
   } = useFilter()
 
-  const collectionsQuery = useQuery(
-    forgeAPI.scoresLibrary.collections.list.queryOptions()
-  )
+  const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const sortedAuthors = useMemo(
     () =>

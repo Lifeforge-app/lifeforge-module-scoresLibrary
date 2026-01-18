@@ -35,7 +35,7 @@ function SidebarTypeItem({
   }, [data])
 
   const deleteMutation = useMutation(
-    forgeAPI.scoresLibrary.types.remove.input({ id: data.id }).mutationOptions({
+    forgeAPI.types.remove.input({ id: data.id }).mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: ['scoresLibrary']

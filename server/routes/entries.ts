@@ -1,36 +1,23 @@
-import { SCHEMAS } from '@schema'
+import { ClientError } from '@lifeforge/server-utils'
 import z from 'zod'
 
-import { forgeController, forgeRouter } from '@functions/routes'
-import { ClientError } from '@functions/routes/utils/response'
-import { addToTaskPool, updateTaskInPool } from '@functions/socketio/taskPool'
+import forge from '../forge'
+import scoresLibrarySchemas from '../schema'
+import { processFiles, setLeft } from '../utils/uploadFiles'
 
-import { processFiles } from '../utils/uploadFiles'
-
-export let left = 0
-
-export function setLeft(value: number) {
-  left = value
-}
-
-const sidebarData = forgeController
+export const sidebarData = forge
   .query()
-  .description({
-    en: 'Get sidebar statistics and filters',
-    ms: 'Dapatkan statistik dan penapis bar sisi',
-    'zh-CN': '获取侧边栏统计和筛选',
-    'zh-TW': '獲取側邊欄統計和篩選'
-  })
+  .description('Get sidebar statistics and filters')
   .input({})
   .callback(async ({ pb }) => {
     const allScores = await pb.getList
-      .collection('scoresLibrary__entries')
+      .collection('entries')
       .page(1)
       .perPage(1)
       .execute()
 
     const favourites = await pb.getList
-      .collection('scoresLibrary__entries')
+      .collection('entries')
       .page(1)
       .perPage(1)
       .filter([
@@ -43,11 +30,11 @@ const sidebarData = forgeController
       .execute()
 
     const allAuthors = await pb.getFullList
-      .collection('scoresLibrary__authors_aggregated')
+      .collection('authors_aggregated')
       .execute()
 
     const allTypes = await pb.getFullList
-      .collection('scoresLibrary__types_aggregated')
+      .collection('types_aggregated')
       .sort(['amount', 'name'])
       .execute()
 
@@ -61,14 +48,9 @@ const sidebarData = forgeController
     }
   })
 
-const list = forgeController
+export const list = forge
   .query()
-  .description({
-    en: 'Get scores with filters and pagination',
-    ms: 'Dapatkan skor dengan penapis dan penomboran halaman',
-    'zh-CN': '获取带筛选和分页的乐谱',
-    'zh-TW': '獲取帶篩選和分頁的樂譜'
-  })
+  .description('Get scores with filters and pagination')
   .input({
     query: z.object({
       page: z
@@ -95,7 +77,7 @@ const list = forgeController
       query: { page, query = '', category, author, collection, starred, sort }
     }) => {
       return pb.getList
-        .collection('scoresLibrary__entries')
+        .collection('entries')
         .page(page)
         .perPage(20)
         .filter([
@@ -166,31 +148,19 @@ const list = forgeController
     }
   )
 
-const random = forgeController
+export const random = forge
   .query()
-  .description({
-    en: 'Get a random score',
-    ms: 'Dapatkan skor rawak',
-    'zh-CN': '获取随机乐谱',
-    'zh-TW': '獲取隨機樂譜'
-  })
+  .description('Get a random score')
   .input({})
   .callback(async ({ pb }) => {
-    const allScores = await pb.getFullList
-      .collection('scoresLibrary__entries')
-      .execute()
+    const allScores = await pb.getFullList.collection('entries').execute()
 
     return allScores[Math.floor(Math.random() * allScores.length)]
   })
 
-const upload = forgeController
+export const upload = forge
   .mutation()
-  .description({
-    en: 'Upload score files',
-    ms: 'Muat naik fail skor',
-    'zh-CN': '上传乐谱文件',
-    'zh-TW': '上傳樂譜檔案'
-  })
+  .description('Upload score files')
   .input({})
   .statusCode(202)
   .media({
@@ -199,12 +169,12 @@ const upload = forgeController
       multiple: true
     }
   })
-  .callback(async ({ io, pb, media: { files } }) => {
+  .callback(async ({ io, pb, media: { files }, core: { tasks } }) => {
     if (!files) {
       throw new ClientError('No files provided')
     }
 
-    const taskId = addToTaskPool(io, {
+    const taskId = tasks.add(io, {
       module: 'scoresLibrary',
       description: 'Uploading music scores from local',
       progress: {
@@ -219,13 +189,13 @@ const upload = forgeController
         let groups: Record<
           string,
           {
-            pdf: Express.Multer.File | null
-            mscz: Express.Multer.File | null
-            mp3: Express.Multer.File | null
+            pdf: any | null
+            mscz: any | null
+            mp3: any | null
           }
         > = {}
 
-        for (const file of files as Express.Multer.File[]) {
+        for (const file of files as any[]) {
           const decodedName = decodeURIComponent(file.originalname)
 
           const extension = decodedName.split('.').pop()
@@ -254,7 +224,7 @@ const upload = forgeController
           Object.entries(groups).filter(([_, group]) => group.pdf)
         )
 
-        updateTaskInPool(io, taskId, {
+        tasks.update(io, taskId, {
           status: 'running',
           progress: {
             left: Object.keys(groups).length,
@@ -262,13 +232,13 @@ const upload = forgeController
           }
         })
 
-        left = Object.keys(groups).length
+        setLeft(Object.keys(groups).length)
 
-        processFiles(pb, groups, io, taskId)
+        processFiles(pb, groups, io, taskId, tasks)
 
         return { status: 'success' }
       } catch (error) {
-        updateTaskInPool(io, taskId, {
+        tasks.update(io, taskId, {
           status: 'failed',
           error: error instanceof Error ? error.message : 'Unknown error'
         })
@@ -280,19 +250,14 @@ const upload = forgeController
     return taskId
   })
 
-const update = forgeController
+export const update = forge
   .mutation()
-  .description({
-    en: 'Update score details',
-    ms: 'Kemas kini butiran skor',
-    'zh-CN': '更新乐谱详情',
-    'zh-TW': '更新樂譜詳情'
-  })
+  .description('Update score details')
   .input({
     query: z.object({
       id: z.string()
     }),
-    body: SCHEMAS.scoresLibrary.entries.schema
+    body: scoresLibrarySchemas.entries
       .pick({
         name: true,
         author: true,
@@ -303,73 +268,50 @@ const update = forgeController
       })
   })
   .existenceCheck('query', {
-    id: 'scoresLibrary__entries'
+    id: 'entries'
   })
   .existenceCheck('body', {
-    collection: '[scoresLibrary__collections]'
+    collection: '[collections]'
   })
   .callback(({ pb, query: { id }, body }) =>
-    pb.update.collection('scoresLibrary__entries').id(id).data(body).execute()
+    pb.update.collection('entries').id(id).data(body).execute()
   )
 
-const remove = forgeController
+export const remove = forge
   .mutation()
-  .description({
-    en: 'Delete a score',
-    ms: 'Padam skor',
-    'zh-CN': '删除乐谱',
-    'zh-TW': '刪除樂譜'
-  })
+  .description('Delete a score')
   .input({
     query: z.object({
       id: z.string()
     })
   })
   .existenceCheck('query', {
-    id: 'scoresLibrary__entries'
+    id: 'entries'
   })
   .statusCode(204)
   .callback(async ({ pb, query: { id } }) =>
-    pb.delete.collection('scoresLibrary__entries').id(id).execute()
+    pb.delete.collection('entries').id(id).execute()
   )
 
-const toggleFavourite = forgeController
+export const toggleFavourite = forge
   .mutation()
-  .description({
-    en: 'Toggle favourite status',
-    ms: 'Togol status kegemaran',
-    'zh-CN': '切换收藏状态',
-    'zh-TW': '切換收藏狀態'
-  })
+  .description('Toggle favourite status')
   .input({
     query: z.object({
       id: z.string()
     })
   })
   .existenceCheck('query', {
-    id: 'scoresLibrary__entries'
+    id: 'entries'
   })
   .callback(async ({ pb, query: { id } }) => {
-    const entry = await pb.getOne
-      .collection('scoresLibrary__entries')
-      .id(id)
-      .execute()
+    const entry = await pb.getOne.collection('entries').id(id).execute()
 
     return await pb.update
-      .collection('scoresLibrary__entries')
+      .collection('entries')
       .id(id)
       .data({
         isFavourite: !entry.isFavourite
       })
       .execute()
   })
-
-export default forgeRouter({
-  sidebarData,
-  list,
-  random,
-  upload,
-  update,
-  remove,
-  toggleFavourite
-})

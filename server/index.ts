@@ -1,9 +1,9 @@
-import { forgeRouter } from '@functions/routes'
+import { forgeRouter } from '@lifeforge/server-utils'
 
-import collectionsRouter from './routes/collections'
-import entriesRouter from './routes/entries'
-import guitarWorldRouter from './routes/guitarWorld'
-import typesRouter from './routes/types'
+import * as collectionsRouter from './routes/collections'
+import * as entriesRouter from './routes/entries'
+import * as guitarWorldRouter from './routes/guitarWorld'
+import * as typesRouter from './routes/types'
 
 export default forgeRouter({
   entries: entriesRouter,

@@ -1,9 +1,10 @@
 import type { ScoreLibraryCollection } from '@'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from 'lifeforge-ui'
 import { toast } from 'react-toastify'
 import { type InferInput } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 function ModifyCollectionModal({
   onClose,
@@ -19,8 +20,8 @@ function ModifyCollectionModal({
 
   const mutation = useMutation(
     (type === 'create'
-      ? forgeAPI.scoresLibrary.collections.create
-      : forgeAPI.scoresLibrary.collections.update.input({
+      ? forgeAPI.collections.create
+      : forgeAPI.collections.update.input({
           id: initialData?.id || ''
         })
     ).mutationOptions({
@@ -36,7 +37,7 @@ function ModifyCollectionModal({
   )
 
   const { formProps } = defineForm<
-    InferInput<(typeof forgeAPI.scoresLibrary.collections)[typeof type]>['body']
+    InferInput<(typeof forgeAPI.collections)[typeof type]>['body']
   >({
     namespace: 'apps.scoresLibrary',
     icon: type === 'create' ? 'tabler:plus' : 'tabler:pencil',

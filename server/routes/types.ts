@@ -1,66 +1,43 @@
-import { SCHEMAS } from '@schema'
 import z from 'zod'
 
-import { forgeController, forgeRouter } from '@functions/routes'
+import forge from '../forge'
+import scoresLibrarySchemas from '../schema'
 
-const list = forgeController
+export const list = forge
   .query()
-  .description({
-    en: 'Get all music score types',
-    ms: 'Dapatkan semua jenis skor muzik',
-    'zh-CN': '获取所有音乐乐谱类型',
-    'zh-TW': '獲取所有音樂樂譜類型'
-  })
+  .description('Get all music score types')
   .input({})
   .callback(({ pb }) =>
-    pb.getFullList
-      .collection('scoresLibrary__types_aggregated')
-      .sort(['name'])
-      .execute()
+    pb.getFullList.collection('types_aggregated').sort(['name']).execute()
   )
 
-const create = forgeController
+export const create = forge
   .mutation()
-  .description({
-    en: 'Create a new score type',
-    ms: 'Cipta jenis skor baharu',
-    'zh-CN': '创建新乐谱类型',
-    'zh-TW': '創建新樂譜類型'
-  })
+  .description('Create a new score type')
   .input({
-    body: SCHEMAS.scoresLibrary.types.schema
+    body: scoresLibrarySchemas.types
   })
   .statusCode(201)
   .callback(({ pb, body }) =>
-    pb.create.collection('scoresLibrary__types').data(body).execute()
+    pb.create.collection('types').data(body).execute()
   )
 
-const update = forgeController
+export const update = forge
   .mutation()
-  .description({
-    en: 'Update score type details',
-    ms: 'Kemas kini butiran jenis skor',
-    'zh-CN': '更新乐谱类型详情',
-    'zh-TW': '更新樂譜類型詳情'
-  })
+  .description('Update score type details')
   .input({
     query: z.object({
       id: z.string()
     }),
-    body: SCHEMAS.scoresLibrary.types.schema
+    body: scoresLibrarySchemas.types
   })
   .callback(({ pb, query: { id }, body }) =>
-    pb.update.collection('scoresLibrary__types').id(id).data(body).execute()
+    pb.update.collection('types').id(id).data(body).execute()
   )
 
-const remove = forgeController
+export const remove = forge
   .mutation()
-  .description({
-    en: 'Delete a score type',
-    ms: 'Padam jenis skor',
-    'zh-CN': '删除乐谱类型',
-    'zh-TW': '刪除樂譜類型'
-  })
+  .description('Delete a score type')
   .input({
     query: z.object({
       id: z.string()
@@ -68,12 +45,5 @@ const remove = forgeController
   })
   .statusCode(204)
   .callback(({ pb, query: { id } }) =>
-    pb.delete.collection('scoresLibrary__types').id(id).execute()
+    pb.delete.collection('types').id(id).execute()
   )
-
-export default forgeRouter({
-  list,
-  create,
-  update,
-  remove
-})

@@ -22,11 +22,9 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
 
   const queryClient = useQueryClient()
 
-  const typesQuery = useQuery(forgeAPI.scoresLibrary.types.list.queryOptions())
+  const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
 
-  const collectionsQuery = useQuery(
-    forgeAPI.scoresLibrary.collections.list.queryOptions()
-  )
+  const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const type = useMemo(() => {
     return typesQuery.data?.find(type => type.id === entry.type)
@@ -39,7 +37,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   }, [collectionsQuery.data, entry.collection])
 
   const toggleFavouriteStatusMutation = useMutation(
-    forgeAPI.scoresLibrary.entries.toggleFavourite
+    forgeAPI.entries.toggleFavourite
       .input({
         id: entry.id
       })
@@ -56,7 +54,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   )
 
   const deleteMutation = useMutation(
-    forgeAPI.scoresLibrary.entries.remove
+    forgeAPI.entries.remove
       .input({
         id: entry.id
       })
@@ -105,14 +103,12 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
           <img
             alt=""
             className="h-full"
-            src={
-              forgeAPI.media.input({
-                collectionId: entry.collectionId,
-                recordId: entry.id,
-                fieldId: entry.thumbnail,
-                thumb: '0x512'
-              }).endpoint
-            }
+            src={forgeAPI.getMedia({
+              collectionId: entry.collectionId,
+              recordId: entry.id,
+              fieldId: entry.thumbnail,
+              thumb: '0x512'
+            })}
           />
         </div>
         <div className="flex w-full min-w-0 flex-1 flex-col">

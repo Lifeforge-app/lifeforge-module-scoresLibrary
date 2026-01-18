@@ -1,7 +1,8 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { SearchInput, ViewModeSelector } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import useFilter from '../hooks/useFilter'
 import SortBySelector from './SortBySelector'
@@ -15,13 +16,13 @@ function Searchbar() {
     setRequestRandomLoading(true)
 
     try {
-      const entry = await forgeAPI.scoresLibrary.entries.random.query()
+      const entry = await forgeAPI.entries.random.query()
 
-      const url = forgeAPI.media.input({
+      const url = forgeAPI.getMedia({
         collectionId: entry.collectionId,
         recordId: entry.id,
         fieldId: entry.pdf
-      }).endpoint
+      })
 
       window.open(url, '_blank')
       setRequestRandomLoading(false)

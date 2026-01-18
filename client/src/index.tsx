@@ -23,23 +23,21 @@ import './index.css'
 import Views from './views'
 
 export type ScoreLibraryEntry = InferOutput<
-  typeof forgeAPI.scoresLibrary.entries.list
+  typeof forgeAPI.entries.list
 >['items'][number]
 
-export type ScoreLibraryType = InferOutput<
-  typeof forgeAPI.scoresLibrary.types.list
->[number]
+export type ScoreLibraryType = InferOutput<typeof forgeAPI.types.list>[number]
 
 export type ScoreLibrarySidebarData = InferOutput<
-  typeof forgeAPI.scoresLibrary.entries.sidebarData
+  typeof forgeAPI.entries.sidebarData
 >
 
 export type ScoreLibrarySortType = NonNullable<
-  InferInput<typeof forgeAPI.scoresLibrary.entries.list>['query']['sort']
+  InferInput<typeof forgeAPI.entries.list>['query']['sort']
 > | null
 
 export type ScoreLibraryCollection = InferOutput<
-  typeof forgeAPI.scoresLibrary.collections.list
+  typeof forgeAPI.collections.list
 >[number]
 
 function ScoresLibrary() {
@@ -55,7 +53,7 @@ function ScoresLibrary() {
   } = useFilter()
 
   const entriesQuery = useQuery(
-    forgeAPI.scoresLibrary.entries.list
+    forgeAPI.entries.list
       .input({
         page: page.toString(),
         query: searchQuery.trim(),
@@ -68,15 +66,11 @@ function ScoresLibrary() {
       .queryOptions()
   )
 
-  const sidebarDataQuery = useQuery(
-    forgeAPI.scoresLibrary.entries.sidebarData.queryOptions()
-  )
+  const sidebarDataQuery = useQuery(forgeAPI.entries.sidebarData.queryOptions())
 
-  const typesQuery = useQuery(forgeAPI.scoresLibrary.types.list.queryOptions())
+  const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
 
-  const collectionsQuery = useQuery(
-    forgeAPI.scoresLibrary.collections.list.queryOptions()
-  )
+  const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const { open } = useModalStore()
 

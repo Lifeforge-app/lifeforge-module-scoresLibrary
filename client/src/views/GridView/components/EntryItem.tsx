@@ -20,11 +20,9 @@ import DownloadMenu from '../../../components/DownloadMenu'
 function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   const queryClient = useQueryClient()
 
-  const typesQuery = useQuery(forgeAPI.scoresLibrary.types.list.queryOptions())
+  const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
 
-  const collectionsQuery = useQuery(
-    forgeAPI.scoresLibrary.collections.list.queryOptions()
-  )
+  const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const type = useMemo(() => {
     return typesQuery.data?.find(type => type.id === entry.type)
@@ -39,7 +37,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   const { open } = useModalStore()
 
   const toggleFavouriteStatusMutation = useMutation(
-    forgeAPI.scoresLibrary.entries.toggleFavourite
+    forgeAPI.entries.toggleFavourite
       .input({
         id: entry.id
       })
@@ -56,7 +54,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   )
 
   const deleteMutation = useMutation(
-    forgeAPI.scoresLibrary.entries.remove
+    forgeAPI.entries.remove
       .input({
         id: entry.id
       })
@@ -93,13 +91,11 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
     <Card
       key={entry.id}
       as="a"
-      href={
-        forgeAPI.media.input({
-          collectionId: entry.collectionId,
-          recordId: entry.id,
-          fieldId: entry.pdf
-        }).endpoint
-      }
+      href={forgeAPI.getMedia({
+        collectionId: entry.collectionId,
+        recordId: entry.id,
+        fieldId: entry.pdf
+      })}
       rel="noreferrer"
       target="_blank"
     >
@@ -113,14 +109,12 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
             key={entry.id}
             alt=""
             className="relative h-full object-cover object-top"
-            src={
-              forgeAPI.media.input({
-                collectionId: entry.collectionId,
-                recordId: entry.id,
-                fieldId: entry.thumbnail,
-                thumb: '0x512'
-              }).endpoint
-            }
+            src={forgeAPI.getMedia({
+              collectionId: entry.collectionId,
+              recordId: entry.id,
+              fieldId: entry.thumbnail,
+              thumb: '0x512'
+            })}
           />
         </div>
         <div className="bg-bg-500/80 absolute right-0 bottom-0 rounded-tl-md rounded-br-md p-1 px-2">
@@ -188,13 +182,11 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
           <DownloadMenu entry={entry} />
           {entry.audio && (
             <AudioPlayer
-              url={
-                forgeAPI.media.input({
-                  collectionId: entry.collectionId,
-                  recordId: entry.id,
-                  fieldId: entry.audio
-                }).endpoint
-              }
+              url={forgeAPI.getMedia({
+                collectionId: entry.collectionId,
+                recordId: entry.id,
+                fieldId: entry.audio
+              })}
             />
           )}
         </div>

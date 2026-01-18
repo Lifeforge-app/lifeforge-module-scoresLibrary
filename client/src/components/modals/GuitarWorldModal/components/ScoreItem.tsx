@@ -1,4 +1,3 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import { useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
@@ -6,6 +5,8 @@ import { Button } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { type SocketEvent, useSocketContext } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import type { ScoreLibraryGuitarWorldResponse } from '..'
 
@@ -58,7 +59,7 @@ function ScoreItem({
     setIsDownloading(true)
 
     try {
-      const taskId = await forgeAPI.scoresLibrary.guitarWorld.download.mutate({
+      const taskId = await forgeAPI.guitarWorld.download.mutate({
         cookie,
         id: entry.id,
         name: entry.name,

@@ -16,7 +16,7 @@ import forgeAPI from '@/utils/forgeAPI'
 import ScoreList from './components/ScoreList'
 
 export type ScoreLibraryGuitarWorldResponse = InferOutput<
-  typeof forgeAPI.scoresLibrary.guitarWorld.list
+  typeof forgeAPI.guitarWorld.list
 >
 
 function GuitarWorldModal({ onClose }: { onClose: () => void }) {
@@ -33,7 +33,7 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
   const [page, setPage] = useState(1)
 
   const dataQuery = useQuery(
-    forgeAPI.scoresLibrary.guitarWorld.list
+    forgeAPI.guitarWorld.list
       .input({ cookie: finalCookie, page: page.toString() })
       .queryOptions({
         enabled: !!finalCookie

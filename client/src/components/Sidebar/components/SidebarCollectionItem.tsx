@@ -27,18 +27,16 @@ function SidebarCollectionItem({
   const { open } = useModalStore()
 
   const deleteMutation = useMutation(
-    forgeAPI.scoresLibrary.collections.remove
-      .input({ id: data.id })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['scoresLibrary']
-          })
-        },
-        onError: () => {
-          toast.error('Failed to delete collection')
-        }
-      })
+    forgeAPI.collections.remove.input({ id: data.id }).mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['scoresLibrary']
+        })
+      },
+      onError: () => {
+        toast.error('Failed to delete collection')
+      }
+    })
   )
 
   const handleDelete = useCallback(() => {
