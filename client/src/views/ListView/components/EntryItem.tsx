@@ -1,15 +1,16 @@
 import type { ScoreLibraryEntry } from '@'
 import { Icon } from '@iconify/react/dist/iconify.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useMemo } from 'react'
+import { toast } from 'react-toastify'
+
 import {
   Card,
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
   useModalStore
-} from 'lifeforge-ui'
-import { useCallback, useMemo } from 'react'
-import { toast } from 'react-toastify'
+} from '@lifeforge/ui'
 
 import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
 import forgeAPI from '@/utils/forgeAPI'

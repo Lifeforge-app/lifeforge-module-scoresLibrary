@@ -1,6 +1,8 @@
-import useFilter from '@/hooks/useFilter'
-import { SidebarItem } from 'lifeforge-ui'
 import { useTranslation } from 'react-i18next'
+
+import { SidebarItem } from '@lifeforge/ui'
+
+import useFilter from '@/hooks/useFilter'
 
 function SidebarAuthorItem({
   author,

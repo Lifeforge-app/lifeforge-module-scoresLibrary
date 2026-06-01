@@ -1,6 +1,12 @@
-import useFilter from '@/hooks/useFilter'
-import { ContextMenuGroup, ContextMenuItem, SidebarDivider } from 'lifeforge-ui'
 import { useTranslation } from 'react-i18next'
+
+import {
+  ContextMenuGroup,
+  ContextMenuItem,
+  SidebarDivider
+} from '@lifeforge/ui'
+
+import useFilter from '@/hooks/useFilter'
 
 const SORT_TYPE = [
   ['tabler:clock', 'newest'],

@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { FAB, ModuleHeader } from 'lifeforge-ui'
+import { FAB, ModuleHeader } from '@lifeforge/ui'
 import { useCallback, useRef } from 'react'
 import { type Id, toast } from 'react-toastify'
-import { type SocketEvent, useSocketContext } from 'shared'
+import { type SocketEvent, useSocketContext } from '@lifeforge/shared'
 
 import forgeAPI from '@/utils/forgeAPI'
 

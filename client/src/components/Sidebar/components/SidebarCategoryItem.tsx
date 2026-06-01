@@ -1,13 +1,14 @@
 import type { ScoreLibraryType } from '@'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useCallback } from 'react'
+import { toast } from 'react-toastify'
+
 import {
   ConfirmationModal,
   ContextMenuItem,
   SidebarItem,
   useModalStore
-} from 'lifeforge-ui'
-import { useCallback } from 'react'
-import { toast } from 'react-toastify'
+} from '@lifeforge/ui'
 
 import useFilter from '@/hooks/useFilter'
 import forgeAPI from '@/utils/forgeAPI'

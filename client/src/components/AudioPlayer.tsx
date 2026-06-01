@@ -1,5 +1,6 @@
-import { Button } from 'lifeforge-ui'
 import { useState } from 'react'
+
+import { Button } from '@lifeforge/ui'
 
 function AudioPlayer({ url }: { url: string }) {
   const [audioLoading, setAudioLoading] = useState(false)

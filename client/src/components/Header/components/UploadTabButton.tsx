@@ -1,6 +1,7 @@
-import { Button, ContextMenu, ContextMenuItem } from 'lifeforge-ui'
 import { memo, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { Button, ContextMenu, ContextMenuItem } from '@lifeforge/ui'
 
 function UploadTabButton({
   uploadFiles,

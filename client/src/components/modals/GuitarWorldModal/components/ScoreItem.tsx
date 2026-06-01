@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react'
 import { useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
-import { Button } from 'lifeforge-ui'
+import { Button } from '@lifeforge/ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { type SocketEvent, useSocketContext } from 'shared'
+import { type SocketEvent, useSocketContext } from '@lifeforge/shared'
 
 import forgeAPI from '@/utils/forgeAPI'
 

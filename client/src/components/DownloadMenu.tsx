@@ -1,5 +1,5 @@
-import { ContextMenu, ContextMenuItem } from 'lifeforge-ui'
-import { forceDown } from 'shared'
+import { ContextMenu, ContextMenuItem } from '@lifeforge/ui'
+import { forceDown } from '@lifeforge/shared'
 
 import type { ScoreLibraryEntry } from '..'
 

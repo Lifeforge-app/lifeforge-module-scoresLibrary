@@ -1,4 +1,4 @@
-import { EmptyStateScreen } from 'lifeforge-ui'
+import { EmptyStateScreen } from '@lifeforge/ui'
 
 import type { ScoreLibraryEntry } from '..'
 import useFilter from '../hooks/useFilter'

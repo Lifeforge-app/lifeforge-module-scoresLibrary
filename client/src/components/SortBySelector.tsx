@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react'
-import { Listbox, ListboxOption } from 'lifeforge-ui'
 import { useTranslation } from 'react-i18next'
+
+import { Listbox, ListboxOption } from '@lifeforge/ui'
 
 import useFilter from '../hooks/useFilter'
 

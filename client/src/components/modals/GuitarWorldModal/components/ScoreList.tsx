@@ -1,4 +1,4 @@
-import { ErrorScreen, LoadingScreen, Pagination } from 'lifeforge-ui'
+import { ErrorScreen, LoadingScreen, Pagination } from '@lifeforge/ui'
 
 import type { ScoreLibraryGuitarWorldResponse } from '..'
 import ScoreItem from './ScoreItem'

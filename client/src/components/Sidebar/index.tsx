@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
+
 import {
   EmptyStateScreen,
   SidebarDivider,
@@ -7,8 +9,7 @@ import {
   SidebarWrapper,
   WithQuery,
   useModalStore
-} from 'lifeforge-ui'
-import { useMemo } from 'react'
+} from '@lifeforge/ui'
 
 import useFilter from '@/hooks/useFilter'
 import forgeAPI from '@/utils/forgeAPI'
