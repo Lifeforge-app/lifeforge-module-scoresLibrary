@@ -5,19 +5,37 @@ import z from 'zod'
 
 import forge from '../forge'
 
+const GuitarWorldTabSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  subtitle: z.string(),
+  category: z.string(),
+  mainArtist: z.string(),
+  uploader: z.string(),
+  audioUrl: z.string(),
+  existed: z.boolean()
+})
+
 export const list = forge
-  .query()
-  .description('Get tabs from Guitar World')
-  .input({
-    query: z.object({
-      cookie: z.string(),
-      page: z
-        .string()
-        .optional()
-        .transform(val => parseInt(val ?? '1', 10) || 1)
-    })
+  .query({
+    description: 'Get tabs from Guitar World',
+    input: {
+      query: z.object({
+        cookie: z.string(),
+        page: z.string().optional().default('1')
+      })
+    },
+    output: {
+      OK: z.object({
+        data: z.array(GuitarWorldTabSchema),
+        totalItems: z.number(),
+        perPage: z.number()
+      })
+    }
   })
-  .callback(async ({ pb, query: { cookie, page } }) => {
+  .callback(async ({ pb, query: { cookie, page }, response }) => {
+    const parsedPage = parseInt(page ?? '1', 10) || 1
+
     const data: {
       data: {
         list: {
@@ -35,15 +53,13 @@ export const list = forge
         page_size: number
       }
     } = await fetch(
-      `https://user.guitarworld.com.cn/user/pu/my/pu_list?page=${page}`,
+      `https://user.guitarworld.com.cn/user/pu/my/pu_list?page=${parsedPage}`,
       {
         headers: {
           cookie
         }
       }
-    ).then(res => {
-      return res.json()
-    })
+    ).then(res => res.json())
 
     const finalData = {
       data: data.data.list
@@ -88,30 +104,39 @@ export const list = forge
       }
     }
 
-    return finalData
+    return response.ok(finalData)
   })
 
 export const download = forge
-  .mutation()
-  .description('Download tab from Guitar World')
-  .input({
-    body: z.object({
-      cookie: z.string(),
-      id: z.number(),
-      name: z.string(),
-      category: z.string(),
-      mainArtist: z.string(),
-      audioUrl: z.string()
-    })
+  .mutation({
+    description: 'Download tab from Guitar World',
+    input: {
+      body: z.object({
+        cookie: z.string(),
+        id: z.number(),
+        name: z.string(),
+        category: z.string(),
+        mainArtist: z.string(),
+        audioUrl: z.string()
+      })
+    },
+    output: {
+      OK: z.string(),
+      BAD_REQUEST: z.string()
+    }
   })
-  .statusCode(202)
   .callback(
     async ({
       pb,
       body: { cookie, id, name, mainArtist, audioUrl },
       io,
-      core: { tasks }
+      core: { tasks },
+      response
     }) => {
+      if (!cookie) {
+        return response.badRequest('Cookie is required')
+      }
+
       const taskId = tasks.add(io, {
         module: 'scoresLibrary',
         description: `Downloading tab ${name} (${id}) from Guitar World`,
@@ -142,7 +167,12 @@ export const download = forge
           const pics = Array.isArray(picObject[0]) ? picObject[0] : picObject
 
           if (pics.length === 0) {
-            throw new Error('No pictures found for this tab')
+            tasks.update(io, taskId, {
+              status: 'failed',
+              error: 'No pictures found for this tab'
+            })
+
+            return
           }
 
           const folder = `./medium/${id}`
@@ -193,7 +223,12 @@ export const download = forge
             )
 
             if (!fs.existsSync(`./medium/${id}.pdf`)) {
-              throw new Error('PDF file not found')
+              tasks.update(io, taskId, {
+                status: 'failed',
+                error: 'PDF file not found'
+              })
+
+              return
             }
 
             const newEntry = await pb.create
@@ -232,6 +267,6 @@ export const download = forge
         }
       })()
 
-      return taskId
+      return response.ok(taskId)
     }
   )
