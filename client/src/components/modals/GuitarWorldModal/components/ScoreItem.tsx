@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { type SocketEvent, useSocketContext } from '@lifeforge/shared'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import type { ScoreLibraryGuitarWorldResponse } from '..'
 

@@ -4,7 +4,7 @@ import { FormModal, defineForm } from '@lifeforge/ui'
 import { useTranslation } from 'react-i18next'
 import type { InferInput } from '@lifeforge/shared'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 function ModifyEntryModal({
   onClose,

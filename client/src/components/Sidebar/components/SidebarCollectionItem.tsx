@@ -10,7 +10,7 @@ import {
   useModalStore
 } from '@lifeforge/ui'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import ModifyCollectionModal from '../../modals/ModifyCollectionModal'
 

@@ -11,7 +11,7 @@ import { useModalStore } from '@lifeforge/ui'
 import { useEffect } from 'react'
 import { type InferInput, type InferOutput } from '@lifeforge/shared'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import Header from './components/Header'
 import InnerHeader from './components/InnerHeader'

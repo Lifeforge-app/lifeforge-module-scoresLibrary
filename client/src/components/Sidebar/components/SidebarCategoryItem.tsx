@@ -11,7 +11,7 @@ import {
 } from '@lifeforge/ui'
 
 import useFilter from '@/hooks/useFilter'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import ModifyCategoryModal from '../../modals/ModifyTypeModal'
 

@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 
 import { SearchInput, ViewModeSelector } from '@lifeforge/ui'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import useFilter from '../hooks/useFilter'
 import SortBySelector from './SortBySelector'

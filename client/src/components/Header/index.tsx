@@ -4,7 +4,7 @@ import { useCallback, useRef } from 'react'
 import { type Id, toast } from 'react-toastify'
 import { type SocketEvent, useSocketContext } from '@lifeforge/shared'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import ActionMenu from './components/ActionMenu'
 import UploadTabButton from './components/UploadTabButton'
