@@ -8,8 +8,9 @@ import {
   ModalHeader,
   TextInput,
   WithQuery,
+  toast,
   useModalStore
-, toast } from '@lifeforge/ui'
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

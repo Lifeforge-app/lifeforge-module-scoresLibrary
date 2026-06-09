@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { toast , SearchInput, ViewModeSelector } from '@lifeforge/ui'
+import { SearchInput, ViewModeSelector, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

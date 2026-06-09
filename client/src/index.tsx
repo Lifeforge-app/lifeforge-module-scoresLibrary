@@ -1,14 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
+
+import { type InferInput, type InferOutput } from '@lifeforge/api'
 import {
   ContentWrapperWithSidebar,
   LayoutWithSidebar,
   Pagination,
   Scrollbar,
   TagsFilter,
-  WithQuery
-, useModalStore } from '@lifeforge/ui'
-import { useEffect } from 'react'
-import { type InferInput, type InferOutput } from '@lifeforge/api'
+  WithQuery,
+  useModalStore
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

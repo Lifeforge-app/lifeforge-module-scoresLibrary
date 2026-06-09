@@ -12,7 +12,10 @@ export const list = forge
   })
   .callback(async ({ pb, response }) =>
     response.ok(
-      await pb.getFullList.collection('types_aggregated').sort(['name']).execute()
+      await pb.getFullList
+        .collection('types_aggregated')
+        .sort(['name'])
+        .execute()
     )
   )
 

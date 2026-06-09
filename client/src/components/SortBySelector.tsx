@@ -1,6 +1,6 @@
-import { Icon , Listbox, ListboxOption } from '@lifeforge/ui'
 import { useTranslation } from 'react-i18next'
 
+import { Icon, Listbox, ListboxOption } from '@lifeforge/ui'
 
 import useFilter from '../hooks/useFilter'
 
