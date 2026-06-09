@@ -20,7 +20,6 @@ import Searchbar from './components/Searchbar'
 import Sidebar from './components/Sidebar'
 import GuitarWorldModal from './components/modals/GuitarWorldModal'
 import useFilter from './hooks/useFilter'
-import './index.css'
 import Views from './views'
 
 export type ScoreLibraryEntry = InferOutput<
