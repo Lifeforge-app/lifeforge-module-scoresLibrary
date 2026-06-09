@@ -1,4 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+
+import type { InferOutput } from '@lifeforge/api'
 import {
   Button,
   ConfirmationModal,
@@ -6,10 +9,7 @@ import {
   TextInput,
   WithQuery,
   useModalStore
-} from '@lifeforge/ui'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import type { InferOutput } from '@lifeforge/shared'
+, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

@@ -1,5 +1,4 @@
 import { ContextMenu, ContextMenuItem } from '@lifeforge/ui'
-import { forceDown } from '@lifeforge/shared'
 
 import type { ScoreLibraryEntry } from '..'
 
@@ -10,12 +9,12 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
         icon="tabler:file-text"
         label="PDF"
         onClick={() => {
-          forceDown(
-            `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
-              entry.id
-            }/${entry.pdf}`,
-            entry.pdf
-          ).catch(console.error)
+          const a = document.createElement('a')
+          a.href = `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
+            entry.id
+          }/${entry.pdf}`
+          a.download = entry.pdf
+          a.click()
         }}
       />
       {entry.audio !== '' && (
@@ -23,12 +22,12 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
           icon="tabler:music"
           label="Audio"
           onClick={() => {
-            forceDown(
-              `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
-                entry.id
-              }/${entry.audio}`,
-              entry.audio
-            ).catch(console.error)
+            const a = document.createElement('a')
+            a.href = `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
+              entry.id
+            }/${entry.audio}`
+            a.download = entry.audio
+            a.click()
           }}
         />
       )}
@@ -37,12 +36,12 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
           icon="simple-icons:musescore"
           label="Musescore"
           onClick={() => {
-            forceDown(
-              `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
-                entry.id
-              }/${entry.musescore}`,
-              entry.musescore
-            ).catch(console.error)
+            const a = document.createElement('a')
+            a.href = `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
+              entry.id
+            }/${entry.musescore}`
+            a.download = entry.musescore
+            a.click()
           }}
         />
       )}

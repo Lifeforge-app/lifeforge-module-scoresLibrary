@@ -1,16 +1,16 @@
 import type { ScoreLibraryEntry } from '@'
-import { Icon } from '@iconify/react/dist/iconify.js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
-import { toast } from 'react-toastify'
 
 import {
   Card,
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
+  toast,
   useModalStore
 } from '@lifeforge/ui'
+import { Icon } from '@lifeforge/ui'
 
 import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
 import { forgeAPI } from '@/manifest'
@@ -83,7 +83,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
       description: `Are you sure you want to delete this score for song "${entry.name}"?`,
       confirmationPrompt: entry.name,
       onConfirm: async () => {
-        await deleteMutation.mutateAsync({})
+        await deleteMutation.mutateAsync(undefined)
       }
     })
   }, [entry])
@@ -130,7 +130,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
             icon={entry.isFavourite ? 'tabler:star-off' : 'tabler:star'}
             label={entry.isFavourite ? 'Unfavourite' : 'Favourite'}
             onClick={() => {
-              toggleFavouriteStatusMutation.mutateAsync({})
+              toggleFavouriteStatusMutation.mutateAsync(undefined)
             }}
           />
           <ContextMenuItem

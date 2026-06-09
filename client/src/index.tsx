@@ -6,10 +6,9 @@ import {
   Scrollbar,
   TagsFilter,
   WithQuery
-} from '@lifeforge/ui'
-import { useModalStore } from '@lifeforge/ui'
+, useModalStore } from '@lifeforge/ui'
 import { useEffect } from 'react'
-import { type InferInput, type InferOutput } from '@lifeforge/shared'
+import { type InferInput, type InferOutput } from '@lifeforge/api'
 
 import { forgeAPI } from '@/manifest'
 

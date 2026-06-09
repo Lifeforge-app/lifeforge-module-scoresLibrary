@@ -2,7 +2,7 @@ import type { ScoreLibraryEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from '@lifeforge/ui'
 import { useTranslation } from 'react-i18next'
-import type { InferInput } from '@lifeforge/shared'
+import type { InferInput } from '@lifeforge/api'
 
 import { forgeAPI } from '@/manifest'
 

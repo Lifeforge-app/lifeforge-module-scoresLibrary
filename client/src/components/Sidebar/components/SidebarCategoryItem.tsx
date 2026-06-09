@@ -1,9 +1,8 @@
 import type { ScoreLibraryType } from '@'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { toast } from 'react-toastify'
 
-import {
+import { toast ,
   ConfirmationModal,
   ContextMenuItem,
   SidebarItem,
@@ -54,7 +53,7 @@ function SidebarTypeItem({
       description: 'Are you sure you want to delete this type?',
       confirmationButton: 'delete',
       onConfirm: async () => {
-        await deleteMutation.mutateAsync({})
+        await deleteMutation.mutateAsync(undefined)
       }
     })
   }, [])

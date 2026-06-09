@@ -1,9 +1,8 @@
 import type { ScoreLibraryCollection } from '@'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { toast } from 'react-toastify'
 
-import {
+import { toast ,
   ConfirmationModal,
   ContextMenuItem,
   SidebarItem,
@@ -47,7 +46,7 @@ function SidebarCollectionItem({
         'Are you sure you want to delete this collection?\n\nNote: Items will not be deleted.',
       confirmationButton: 'delete',
       onConfirm: async () => {
-        await deleteMutation.mutateAsync({})
+        await deleteMutation.mutateAsync(undefined)
       }
     })
   }, [])

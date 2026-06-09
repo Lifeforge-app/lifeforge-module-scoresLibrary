@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { FAB, ModuleHeader } from '@lifeforge/ui'
 import { useCallback, useRef } from 'react'
-import { type Id, toast } from 'react-toastify'
-import { type SocketEvent, useSocketContext } from '@lifeforge/shared'
+
+import { type SocketEvent, useSocketContext } from '@lifeforge/api'
+import { FAB, ModuleHeader, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
@@ -20,7 +20,7 @@ function Header({
 
   const queryClient = useQueryClient()
 
-  const toastId = useRef<Id>(null)
+  const toastId = useRef<string | number | null>(null)
 
   const uploadFiles = useCallback(async () => {
     const input = document.createElement('input')
