@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import {
   ContextMenuGroup,
@@ -16,7 +16,7 @@ const SORT_TYPE = [
 ] as const
 
 function ActionMenu() {
-  const { t } = useTranslation('apps.scoresLibrary')
+  const { t } = useModuleTranslation()
 
   const { view, sort, updateFilter } = useFilter()
 

@@ -1,6 +1,6 @@
 import type { ScoreLibraryEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import type { InferInput } from '@lifeforge/api'
 import { FormModal, defineForm } from '@lifeforge/ui'
@@ -16,7 +16,7 @@ function ModifyEntryModal({
     initialData: ScoreLibraryEntry
   }
 }) {
-  const { t } = useTranslation('apps.scoresLibrary')
+  const { t } = useModuleTranslation()
 
   const mutation = useMutation(
     forgeAPI.entries.update.input({ id: initialData.id }).mutationOptions({

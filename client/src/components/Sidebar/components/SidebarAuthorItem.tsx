@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { SidebarItem } from '@lifeforge/ui'
 
@@ -13,7 +13,7 @@ function SidebarAuthorItem({
   count: number
   isActive: boolean
 }) {
-  const { t } = useTranslation('apps.scoresLibrary')
+  const { t } = useModuleTranslation()
 
   const { updateFilter } = useFilter()
 

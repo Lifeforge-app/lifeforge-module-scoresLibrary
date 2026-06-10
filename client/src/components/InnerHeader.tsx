@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { Button, useModuleSidebarState } from '@lifeforge/ui'
 
 import useFilter from '../hooks/useFilter'
 
 function InnerHeader({ totalItemsCount }: { totalItemsCount: number }) {
-  const { t } = useTranslation('apps.scoresLibrary')
+  const { t } = useModuleTranslation()
 
   const { setIsSidebarOpen } = useModuleSidebarState()
 

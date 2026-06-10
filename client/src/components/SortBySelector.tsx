@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { Icon, Listbox, ListboxOption } from '@lifeforge/ui'
 
@@ -12,7 +12,7 @@ const SORT_TYPE = [
 ]
 
 function SortBySelector() {
-  const { t } = useTranslation('apps.scoresLibrary')
+  const { t } = useModuleTranslation()
 
   const { sort, updateFilter } = useFilter()
 

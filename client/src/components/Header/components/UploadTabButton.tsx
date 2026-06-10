@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import { Button, ContextMenu, ContextMenuItem } from '@lifeforge/ui'
 
@@ -10,7 +10,7 @@ function UploadTabButton({
   uploadFiles: () => void
   setGuitarWorldModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-  const { t } = useTranslation('apps.scoresLibrary')
+  const { t } = useModuleTranslation()
 
   const handleOpenGuitarWorldModal = useCallback(() => {
     setGuitarWorldModalOpen(true)
