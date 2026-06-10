@@ -4,9 +4,7 @@ import { Button } from '@lifeforge/ui'
 
 function AudioPlayer({ url }: { url: string }) {
   const [audioLoading, setAudioLoading] = useState(false)
-
   const [isPlaying, setIsPlaying] = useState(false)
-
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
 
   function togglePlay() {

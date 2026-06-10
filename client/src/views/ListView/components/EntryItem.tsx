@@ -9,8 +9,7 @@ import {
   ContextMenuItem,
   toast,
   useModalStore
-} from '@lifeforge/ui'
-import { Icon } from '@lifeforge/ui'
+, Icon } from '@lifeforge/ui'
 
 import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
 import { forgeAPI } from '@/manifest'
@@ -20,11 +19,8 @@ import DownloadMenu from '../../../components/DownloadMenu'
 
 function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
   const { open } = useModalStore()
-
   const queryClient = useQueryClient()
-
   const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
-
   const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const type = useMemo(() => {

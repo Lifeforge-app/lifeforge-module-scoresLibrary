@@ -30,9 +30,7 @@ function ModifyEntryModal({
   )
 
   const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
-
   const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
-
   const queryClient = useQueryClient()
 
   const { formProps } = defineForm<

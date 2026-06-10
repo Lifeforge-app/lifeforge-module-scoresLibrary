@@ -10,6 +10,7 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
         label="PDF"
         onClick={() => {
           const a = document.createElement('a')
+
           a.href = `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
             entry.id
           }/${entry.pdf}`
@@ -23,6 +24,7 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
           label="Audio"
           onClick={() => {
             const a = document.createElement('a')
+
             a.href = `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
               entry.id
             }/${entry.audio}`
@@ -37,6 +39,7 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
           label="Musescore"
           onClick={() => {
             const a = document.createElement('a')
+
             a.href = `${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
               entry.id
             }/${entry.musescore}`

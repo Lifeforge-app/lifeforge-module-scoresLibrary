@@ -17,7 +17,6 @@ function ScoreItem({
   cookie: string
 }) {
   const queryClient = useQueryClient()
-
   const socket = useSocketContext()
 
   const [audioInstance, setAudioInstance] = useState<HTMLAudioElement | null>(

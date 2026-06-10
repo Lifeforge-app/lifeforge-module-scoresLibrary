@@ -13,7 +13,6 @@ const SORT_TYPE = [
 
 function SortBySelector() {
   const { t } = useModuleTranslation()
-
   const { sort, updateFilter } = useFilter()
 
   return (

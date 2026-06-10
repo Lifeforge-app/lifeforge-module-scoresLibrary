@@ -24,7 +24,6 @@ function SidebarCollectionItem({
   onSelect: (collection: string | null) => void
 }) {
   const queryClient = useQueryClient()
-
   const { open } = useModalStore()
 
   const deleteMutation = useMutation(

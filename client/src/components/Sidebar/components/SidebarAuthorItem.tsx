@@ -14,7 +14,6 @@ function SidebarAuthorItem({
   isActive: boolean
 }) {
   const { t } = useModuleTranslation()
-
   const { updateFilter } = useFilter()
 
   return (

@@ -17,9 +17,7 @@ function Header({
   setGuitarWorldModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const socket = useSocketContext()
-
   const queryClient = useQueryClient()
-
   const toastId = useRef<string | number | null>(null)
 
   const uploadFiles = useCallback(async () => {

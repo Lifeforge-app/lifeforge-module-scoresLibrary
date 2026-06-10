@@ -23,9 +23,7 @@ function SidebarTypeItem({
   isActive: boolean
 }) {
   const queryClient = useQueryClient()
-
   const { open } = useModalStore()
-
   const { updateFilter } = useFilter()
 
   const handleUpdate = useCallback(() => {

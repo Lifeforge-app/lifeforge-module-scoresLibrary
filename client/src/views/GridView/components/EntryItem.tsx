@@ -7,10 +7,10 @@ import {
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
+  Icon,
   toast,
   useModalStore
 } from '@lifeforge/ui'
-import { Icon } from '@lifeforge/ui'
 
 import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
 import { forgeAPI } from '@/manifest'
@@ -19,10 +19,9 @@ import AudioPlayer from '../../../components/AudioPlayer'
 import DownloadMenu from '../../../components/DownloadMenu'
 
 function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
+  const { open } = useModalStore()
   const queryClient = useQueryClient()
-
   const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
-
   const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
 
   const type = useMemo(() => {
@@ -34,8 +33,6 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
       collection => collection.id === entry.collection
     )
   }, [collectionsQuery.data, entry.collection])
-
-  const { open } = useModalStore()
 
   const toggleFavouriteStatusMutation = useMutation(
     forgeAPI.entries.toggleFavourite

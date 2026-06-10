@@ -22,7 +22,6 @@ import SidebarCollectionItem from './components/SidebarCollectionItem'
 
 function Sidebar() {
   const { open } = useModalStore()
-
   const dataQuery = useQuery(forgeAPI.entries.sidebarData.queryOptions())
 
   const {

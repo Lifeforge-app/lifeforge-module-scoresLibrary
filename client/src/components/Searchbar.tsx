@@ -9,7 +9,6 @@ import SortBySelector from './SortBySelector'
 
 function Searchbar() {
   const { searchQuery, setSearchQuery, view, updateFilter } = useFilter()
-
   const [requestRandomLoading, setRequestRandomLoading] = useState(false)
 
   async function requestRandomEntry() {

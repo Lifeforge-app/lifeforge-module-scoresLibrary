@@ -67,11 +67,8 @@ function ScoresLibrary() {
   )
 
   const sidebarDataQuery = useQuery(forgeAPI.entries.sidebarData.queryOptions())
-
   const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
-
   const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
-
   const { open } = useModalStore()
 
   useEffect(() => {

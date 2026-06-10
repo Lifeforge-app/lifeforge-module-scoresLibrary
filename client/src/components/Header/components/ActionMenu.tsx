@@ -17,7 +17,6 @@ const SORT_TYPE = [
 
 function ActionMenu() {
   const { t } = useModuleTranslation()
-
   const { view, sort, updateFilter } = useFilter()
 
   return (

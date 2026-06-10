@@ -6,9 +6,7 @@ import useFilter from '../hooks/useFilter'
 
 function InnerHeader({ totalItemsCount }: { totalItemsCount: number }) {
   const { t } = useModuleTranslation()
-
   const { setIsSidebarOpen } = useModuleSidebarState()
-
   const { starred, author, category, collection } = useFilter()
 
   return (
