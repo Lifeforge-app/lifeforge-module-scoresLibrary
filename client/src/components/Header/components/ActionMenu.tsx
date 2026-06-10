@@ -1,5 +1,4 @@
 import { useModuleTranslation } from '@lifeforge/localization'
-
 import {
   ContextMenuGroup,
   ContextMenuItem,
@@ -33,7 +32,6 @@ function ActionMenu() {
               checked={sort === id}
               icon={icon}
               label={t(`sortTypes.${id}`)}
-              namespace="apps.scoresLibrary"
               onClick={() => {
                 updateFilter('sort', id)
               }}

@@ -1,8 +1,8 @@
 import type { ScoreLibraryEntry } from '@'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useModuleTranslation } from '@lifeforge/localization'
 
 import type { InferInput } from '@lifeforge/api'
+import { useModuleTranslation } from '@lifeforge/localization'
 import { FormModal, defineForm } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'

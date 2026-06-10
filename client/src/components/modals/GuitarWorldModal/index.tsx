@@ -74,7 +74,6 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
             : undefined
         }
         icon="mingcute:guitar-line"
-        namespace="apps.scoresLibrary"
         title="Guitar World"
         onClose={onClose}
       />
@@ -83,7 +82,6 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
           <TextInput
             icon="tabler:cookie"
             label="cookie"
-            namespace="apps.scoresLibrary"
             placeholder="Cookie from Guitar World"
             value={cookie}
             onChange={setCookie}

@@ -44,7 +44,6 @@ function Searchbar() {
         }}
         className="bg-bg-50"
         debounceMs={300}
-        namespace="apps.scoresLibrary"
         searchTarget="score"
         value={searchQuery}
         onChange={setSearchQuery}

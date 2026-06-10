@@ -7,9 +7,10 @@ import {
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
+  Icon,
   toast,
   useModalStore
-, Icon } from '@lifeforge/ui'
+} from '@lifeforge/ui'
 
 import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
 import { forgeAPI } from '@/manifest'

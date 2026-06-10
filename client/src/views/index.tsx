@@ -24,8 +24,7 @@ function Views({
       <EmptyStateScreen
         icon="tabler:music-off"
         message={{
-          id: 'score',
-          namespace: 'apps.scoresLibrary'
+          id: 'score'
         }}
       />
     )

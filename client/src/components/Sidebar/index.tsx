@@ -53,7 +53,6 @@ function Sidebar() {
               active={[type, author, starred, collection].every(v => !v)}
               icon="tabler:list"
               label="All scores"
-              namespace="apps.scoresLibrary"
               number={sidebarData.total}
               onClick={() => {
                 updateFilter('category', null)
@@ -66,7 +65,6 @@ function Sidebar() {
               active={starred}
               icon="tabler:star-filled"
               label="Starred"
-              namespace="apps.scoresLibrary"
               number={sidebarData.favourites}
               onClick={() => {
                 updateFilter('starred', true)
@@ -83,7 +81,6 @@ function Sidebar() {
                 }
               }}
               label="collections"
-              namespace="apps.scoresLibrary"
             />
             <WithQuery query={collectionsQuery}>
               {collections =>
@@ -106,8 +103,7 @@ function Sidebar() {
                     className="h-min"
                     icon="tabler:folder-off"
                     message={{
-                      id: 'collections',
-                      namespace: 'apps.scoresLibrary'
+                      id: 'collections'
                     }}
                   />
                 )
@@ -124,7 +120,6 @@ function Sidebar() {
                 }
               }}
               label="categories"
-              namespace="apps.scoresLibrary"
             />
             {sidebarData.types.length > 0 ? (
               sidebarData.types.map(t => (
@@ -136,13 +131,12 @@ function Sidebar() {
                 className="h-min"
                 icon="tabler:apps-off"
                 message={{
-                  id: 'categories',
-                  namespace: 'apps.scoresLibrary'
+                  id: 'categories'
                 }}
               />
             )}
             <SidebarDivider />
-            <SidebarTitle label="authors" namespace="apps.scoresLibrary" />
+            <SidebarTitle label="authors" />
             {sortedAuthors.length > 0 ? (
               sortedAuthors.map(([auth, count]) => (
                 <SidebarAuthorItem
@@ -158,8 +152,7 @@ function Sidebar() {
                 className="h-min"
                 icon="tabler:user-off"
                 message={{
-                  id: 'authors',
-                  namespace: 'apps.scoresLibrary'
+                  id: 'authors'
                 }}
               />
             )}

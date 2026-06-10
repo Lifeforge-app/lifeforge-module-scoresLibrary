@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import { Button, ContextMenu, ContextMenuItem } from '@lifeforge/ui'
 
 function UploadTabButton({
@@ -35,13 +35,11 @@ function UploadTabButton({
       <ContextMenuItem
         icon="tabler:upload"
         label="Upload from local"
-        namespace="apps.scoresLibrary"
         onClick={uploadFiles}
       />
       <ContextMenuItem
         icon="mingcute:guitar-line"
         label="Download from Guitar World"
-        namespace="apps.scoresLibrary"
         onClick={handleOpenGuitarWorldModal}
       />
     </ContextMenu>

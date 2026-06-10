@@ -1,5 +1,4 @@
 import { useModuleTranslation } from '@lifeforge/localization'
-
 import { Icon, Listbox, ListboxOption } from '@lifeforge/ui'
 
 import useFilter from '../hooks/useFilter'
