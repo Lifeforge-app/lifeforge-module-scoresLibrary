@@ -1,4 +1,4 @@
-import { ErrorScreen, LoadingScreen, Pagination } from '@lifeforge/ui'
+import { ErrorScreen, LoadingScreen, Pagination, Stack } from '@lifeforge/ui'
 
 import type { ScoreLibraryGuitarWorldResponse } from '..'
 import ScoreItem from './ScoreItem'
@@ -29,11 +29,11 @@ function ScoreList({
         totalPages={Math.ceil(data.totalItems / data.perPage)}
         onPageChange={setPage}
       />
-      <ul className="divide-bg-200 dark:divide-bg-800/50 my-4 divide-y">
+      <Stack my="md">
         {data.data.map(entry => (
           <ScoreItem key={entry.id} cookie={cookie} entry={entry} />
         ))}
-      </ul>
+      </Stack>
       <Pagination
         page={page}
         totalPages={Math.ceil(data.totalItems / data.perPage)}

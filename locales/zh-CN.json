@@ -43,13 +43,27 @@
     "downloadAll": "全部下载"
   },
   "inputs": {
-    "scoreType": "谱类型",
-    "cookie": "会话 Cookie",
-    "author": "作者",
-    "musicName": "音乐名称",
-    "collectionName": "收藏名称",
-    "categoryName": "分类名称",
-    "categoryIcon": "分类图标"
+    "modifyCollection": {
+      "name": "收藏名称"
+    },
+    "modifyType": {
+      "name": "分类名称",
+      "icon": "分类图标"
+    },
+    "modifyEntry": {
+      "name": "音乐名称",
+      "author": "作者",
+      "type": "谱类型",
+      "collection": "收藏"
+    },
+    "importFromMusescore": {
+      "url": "MuseScore 链接",
+      "cookie": "会话 Cookie"
+    },
+    "guitarWorld": {
+      "cookie": "Cookie",
+      "placeholder": "来自 Guitar World 的 Cookie"
+    }
   },
   "items": {
     "score": "乐谱"

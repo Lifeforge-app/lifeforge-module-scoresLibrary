@@ -59,7 +59,15 @@ export const list = forge
           cookie
         }
       }
-    ).then(res => res.json())
+    )
+      .then(res => res.json())
+      .catch(() => ({
+        data: {
+          data: {
+            list: []
+          }
+        }
+      }))
 
     const finalData = {
       data: data.data.list
@@ -218,9 +226,17 @@ export const download = forge
           doc.end()
 
           writeStream.on('finish', async () => {
-            const audioBuffer = await fetch(audioUrl).then(res =>
-              res.arrayBuffer()
-            )
+            let audioBuffer = null
+
+            if (audioUrl) {
+              try {
+                audioBuffer = await fetch(audioUrl).then(res =>
+                  res.arrayBuffer()
+                )
+              } catch {
+                // Failed to download audio
+              }
+            }
 
             if (!fs.existsSync(`./medium/${id}.pdf`)) {
               tasks.update(io, taskId, {
@@ -237,7 +253,9 @@ export const download = forge
                 name,
                 author: mainArtist,
                 pageCount: images.length,
-                audio: new File([Buffer.from(audioBuffer)], `${id}.mp3`),
+                audio:
+                  audioBuffer &&
+                  new File([Buffer.from(audioBuffer)], `${id}.mp3`),
                 pdf: new File(
                   [fs.readFileSync(`./medium/${id}.pdf`)],
                   `${id}.pdf`
@@ -251,7 +269,7 @@ export const download = forge
               })
               .execute()
 
-            fs.rmdirSync(folder, { recursive: true })
+            fs.rmSync(folder, { recursive: true })
             fs.unlinkSync(`./medium/${id}.pdf`)
 
             tasks.update(io, taskId, {

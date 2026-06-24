@@ -23,7 +23,11 @@ export const create = forge
   .mutation({
     description: 'Create a new score collection',
     input: {
-      body: scoresLibrarySchemas.collections
+      body: scoresLibrarySchemas.collections.omit({
+        id: true,
+        collectionName: true,
+        collectionId: true
+      })
     },
     output: {
       CREATED: scoresLibrarySchemas.collections
@@ -40,7 +44,11 @@ export const update = forge
     description: 'Update collection details',
     input: {
       query: z.object({ id: z.string() }),
-      body: scoresLibrarySchemas.collections
+      body: scoresLibrarySchemas.collections.omit({
+        id: true,
+        collectionName: true,
+        collectionId: true
+      })
     },
     existenceCheck: {
       query: { id: 'collections' }

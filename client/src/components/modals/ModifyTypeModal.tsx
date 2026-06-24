@@ -1,10 +1,22 @@
 import type { ScoreLibraryType } from '@'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
 
-import type { InferInput } from '@lifeforge/api'
-import { FormModal, defineForm } from '@lifeforge/ui'
+import {
+  FormModal,
+  IconField,
+  TextField,
+  createDefaultValues
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
+
+const schema = z.object({
+  name: z.string().min(1, 'Required'),
+  icon: z.string().min(1, 'Required')
+})
 
 function ModifyCategoryModal({
   onClose,
@@ -26,44 +38,49 @@ function ModifyCategoryModal({
         })
     ).mutationOptions({
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['scoresLibrary'] })
+        queryClient.invalidateQueries({ queryKey: forgeAPI.key })
         onClose()
       }
     })
   )
 
-  const { formProps } = defineForm<
-    InferInput<(typeof forgeAPI.types)[typeof openType]>['body']
-  >({
-    icon: openType === 'create' ? 'tabler:plus' : 'tabler:pencil',
-    title: `categories.${openType}`,
-    namespace: 'apps.scoresLibrary',
-    onClose,
-    submitButton: openType
+  const form = useForm({
+    defaultValues: {
+      ...createDefaultValues(schema),
+      ...initialData
+    },
+    resolver: zodResolver(schema)
   })
-    .typesMap({
-      name: 'text',
-      icon: 'icon'
-    })
-    .setupFields({
-      name: {
-        required: true,
-        label: 'Category Name',
-        icon: 'tabler:category',
-        placeholder: 'New Category'
-      },
-      icon: {
-        required: true,
-        label: 'Category Icon'
-      }
-    })
-    .initialData(initialData)
-    .onSubmit(async data => {
-      await mutation.mutateAsync(data)
-    })
-    .build()
 
-  return <FormModal {...formProps} />
+  return (
+    <FormModal
+      form={form}
+      submissionConfig={{
+        template: openType,
+        handler: mutation.mutateAsync
+      }}
+      uiConfig={{
+        icon: openType === 'create' ? 'tabler:plus' : 'tabler:pencil',
+        title: `categories.${openType}`,
+        onClose
+      }}
+    >
+      <TextField
+        required
+        control={form.control}
+        icon="tabler:category"
+        label="modifyType.name"
+        name="name"
+        placeholder="New Category"
+      />
+      <IconField
+        required
+        control={form.control}
+        label="modifyType.icon"
+        name="icon"
+      />
+    </FormModal>
+  )
 }
 
 export default ModifyCategoryModal

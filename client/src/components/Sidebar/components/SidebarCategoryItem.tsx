@@ -1,11 +1,14 @@
 import type { ScoreLibraryType } from '@'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import { useDrop } from 'react-dnd'
 
 import {
+  Box,
   ConfirmationModal,
   ContextMenuItem,
   SidebarItem,
+  colorWithOpacity,
   toast,
   useModalStore
 } from '@lifeforge/ui'
@@ -26,6 +29,34 @@ function SidebarTypeItem({
   const { open } = useModalStore()
   const { updateFilter } = useFilter()
 
+  const [{ isOver }, dropRef] = useDrop(
+    () => ({
+      accept: 'ENTRY',
+      drop: async (item: {
+        entryId: string
+        entryName: string
+        entryAuthor: string
+      }) => {
+        try {
+          await forgeAPI.entries.update.input({ id: item.entryId }).mutate({
+            name: item.entryName,
+            author: item.entryAuthor,
+            type: data.id
+          })
+          queryClient.invalidateQueries({
+            queryKey: forgeAPI.key
+          })
+        } catch {
+          toast.error('Failed to assign category')
+        }
+      },
+      collect: monitor => ({
+        isOver: !!monitor.isOver()
+      })
+    }),
+    [data.id]
+  )
+
   const handleUpdate = useCallback(() => {
     open(ModifyCategoryModal, {
       openType: 'update',
@@ -37,8 +68,9 @@ function SidebarTypeItem({
     forgeAPI.types.remove.input({ id: data.id }).mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['scoresLibrary']
+          queryKey: forgeAPI.key
         })
+        toast.success('Successfully updated category for the score')
       },
       onError: () => {
         toast.error('Failed to delete type')
@@ -58,30 +90,39 @@ function SidebarTypeItem({
   }, [])
 
   return (
-    <SidebarItem
+    <Box
       key={data.id}
-      active={isActive}
-      contextMenuItems={
-        <>
-          <ContextMenuItem
-            icon="tabler:pencil"
-            label="update"
-            onClick={handleUpdate}
-          />
-          <ContextMenuItem
-            dangerous
-            icon="tabler:trash"
-            label="delete"
-            onClick={handleDelete}
-          />
-        </>
-      }
-      icon={data.icon}
-      label={data.name}
-      number={data.amount}
-      onCancelButtonClick={() => updateFilter('category', null)}
-      onClick={() => updateFilter('category', data.id)}
-    />
+      ref={node => {
+        dropRef(node)
+      }}
+      bg={isOver ? { base: colorWithOpacity('custom-500', '20%') } : undefined}
+      r="lg"
+    >
+      <SidebarItem
+        active={isActive}
+        contextMenuItems={
+          <>
+            <ContextMenuItem
+              icon="tabler:pencil"
+              label="update"
+              onClick={handleUpdate}
+            />
+            <ContextMenuItem
+              dangerous
+              icon="tabler:trash"
+              label="delete"
+              onClick={handleDelete}
+            />
+          </>
+        }
+        icon={data.icon}
+        label={data.name}
+        namespace={false}
+        number={data.amount}
+        onCancelButtonClick={() => updateFilter('category', null)}
+        onClick={() => updateFilter('category', data.id)}
+      />
+    </Box>
   )
 }
 

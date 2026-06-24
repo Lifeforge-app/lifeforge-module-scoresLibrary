@@ -20,6 +20,7 @@ function SidebarAuthorItem({
       active={isActive}
       icon="tabler:user"
       label={author || t('unknownAuthor')}
+      namespace={false}
       number={count}
       onCancelButtonClick={() => updateFilter('author', null)}
       onClick={() => updateFilter('author', author || '[na]')}

@@ -35,24 +35,21 @@ function AudioPlayer({ url }: { url: string }) {
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <Button
-        className="p-2!"
-        icon={(() => {
-          if (audioLoading) {
-            return 'svg-spinners:ring-resize'
-          }
+    <Button
+      icon={(() => {
+        if (audioLoading) {
+          return 'svg-spinners:ring-resize'
+        }
 
-          return isPlaying ? 'tabler:pause' : 'tabler:play'
-        })()}
-        variant="plain"
-        onClick={e => {
-          e.preventDefault()
-          e.stopPropagation()
-          togglePlay()
-        }}
-      />
-    </div>
+        return isPlaying ? 'tabler:pause' : 'tabler:play'
+      })()}
+      variant="plain"
+      onClick={e => {
+        e.preventDefault()
+        e.stopPropagation()
+        togglePlay()
+      }}
+    />
   )
 }
 

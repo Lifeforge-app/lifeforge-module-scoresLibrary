@@ -219,15 +219,17 @@ export const upload = forge
           }
         > = {}
 
-        for (const file of files as any[]) {
-          const decodedName = decodeURIComponent(file.originalname)
-
-          const extension = decodedName.split('.').pop()
+        for (const file of files) {
+          const originalName = Buffer.from(
+            file.originalname,
+            'latin1'
+          ).toString('utf-8')
+          const extension = originalName.split('.').pop()
 
           if (!extension || !['mscz', 'mp3', 'pdf'].includes(extension))
             continue
 
-          const name = decodedName.split('.').slice(0, -1).join('.')
+          const name = originalName.split('.').slice(0, -1).join('.')
 
           if (!groups[name]) {
             groups[name] = {
@@ -357,3 +359,68 @@ export const toggleFavourite = forge
         .execute()
     )
   })
+
+export const cleanup = forge
+  .mutation({
+    description: 'Extract score name and author from raw string using AI',
+    input: {
+      body: z.object({
+        rawName: z.string()
+      })
+    },
+    output: {
+      OK: z.object({
+        name: z.string(),
+        author: z.string()
+      })
+    }
+  })
+  .callback(
+    async ({
+      pb,
+      body: { rawName },
+      core: {
+        api: { fetchAI }
+      },
+      response
+    }) => {
+      const NameCleanupSchema = z.object({
+        name: z
+          .string()
+          .describe('The cleaned score name without author or extraneous info'),
+        author: z
+          .string()
+          .describe('The composer/artist name, or empty string if unknown')
+      })
+
+      const result = await fetchAI({
+        pb,
+        provider: 'deepseek',
+        model: 'deepseek-v4-flash',
+        messages: [
+          {
+            role: 'system',
+            content: `You are a music metadata cleaner. Given a raw filename or identifier for a music score,
+extract the score title and the composer/artist name.
+
+Rules:
+- The raw name may contain underscores, hyphens, timestamps, IDs or other noise.
+- Split it into a clean score name and the author name.
+- If the author cannot be clearly identified, output an empty string for author.
+- The score name should be in natural title case (e.g. "Kiss the Rain" not "Kiss_The_Rain").
+- Remove trailing numbers, timestamps, or ID-like suffixes.`
+          },
+          {
+            role: 'user',
+            content: rawName
+          }
+        ],
+        structure: NameCleanupSchema
+      })
+
+      return response.ok({
+        name: result?.name || rawName,
+        author: result?.author || ''
+      })
+    }
+  )

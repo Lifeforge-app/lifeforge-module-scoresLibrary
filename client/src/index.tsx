@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { type InferInput, type InferOutput } from '@lifeforge/api'
 import {
+  Box,
   ContentWrapperWithSidebar,
   LayoutWithSidebar,
   Pagination,
   Scrollbar,
-  TagsFilter,
+  Stack,
   WithQuery,
   useModalStore
 } from '@lifeforge/ui'
@@ -16,7 +19,6 @@ import { forgeAPI } from '@/manifest'
 
 import Header from './components/Header'
 import InnerHeader from './components/InnerHeader'
-import Searchbar from './components/Searchbar'
 import Sidebar from './components/Sidebar'
 import GuitarWorldModal from './components/modals/GuitarWorldModal'
 import useFilter from './hooks/useFilter'
@@ -41,6 +43,8 @@ export type ScoreLibraryCollection = InferOutput<
 >[number]
 
 function ScoresLibrary() {
+  const { open } = useModalStore()
+
   const {
     searchQuery,
     category,
@@ -66,17 +70,12 @@ function ScoresLibrary() {
       .queryOptions()
   )
 
-  const sidebarDataQuery = useQuery(forgeAPI.entries.sidebarData.queryOptions())
-  const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
-  const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
-  const { open } = useModalStore()
-
   useEffect(() => {
     updateFilter('page', 1)
-  }, [searchQuery, category, collection, starred, author, sort])
+  }, [searchQuery, author, category, collection, sort, starred])
 
   return (
-    <>
+    <DndProvider backend={HTML5Backend}>
       <Header
         setGuitarWorldModalOpen={() => open(GuitarWorldModal, null)}
         totalItems={entriesQuery.data?.totalItems}
@@ -85,72 +84,34 @@ function ScoresLibrary() {
         <Sidebar />
         <ContentWrapperWithSidebar>
           <InnerHeader totalItemsCount={entriesQuery.data?.totalItems ?? 0} />
-          <TagsFilter
-            availableFilters={{
-              type: {
-                data:
-                  typesQuery.data?.map(type => ({
-                    id: type.id,
-                    label: type.name,
-                    icon: type.icon
-                  })) ?? []
-              },
-              author: {
-                data:
-                  Object.keys(sidebarDataQuery.data?.authors ?? {}).map(
-                    author => ({
-                      id: author,
-                      label: author,
-                      icon: 'tabler:user'
-                    })
-                  ) ?? []
-              },
-              collection: {
-                data:
-                  collectionsQuery.data?.map(collection => ({
-                    id: collection.id,
-                    label: collection.name,
-                    icon: 'tabler:books'
-                  })) ?? []
-              }
-            }}
-            values={{
-              type: category,
-              author,
-              collection
-            }}
-            onChange={{
-              type: value => updateFilter('category', value),
-              author: value => updateFilter('author', value),
-              collection: value => updateFilter('collection', value)
-            }}
-          />
-          <Searchbar />
           <WithQuery query={entriesQuery}>
             {entries => (
-              <Scrollbar className="mt-6">
-                <Pagination
-                  className="mb-3"
-                  page={entries.page}
-                  totalPages={entries.totalPages}
-                  onPageChange={page => updateFilter('page', page)}
-                />
-                <Views
-                  entries={entries.items}
-                  totalItems={entries.totalItems}
-                />
-                <Pagination
-                  className="mt-3 mb-6"
-                  page={entries.page}
-                  totalPages={entries.totalPages}
-                  onPageChange={page => updateFilter('page', page)}
-                />
-              </Scrollbar>
+              <Box asChild mt="lg">
+                <Scrollbar>
+                  <Stack gap="md">
+                    <Pagination
+                      page={entries.page}
+                      totalPages={entries.totalPages}
+                      onPageChange={page => updateFilter('page', page)}
+                    />
+                    <Views
+                      entries={entries.items}
+                      totalItems={entries.totalItems}
+                    />
+                    <Pagination
+                      mb="lg"
+                      page={entries.page}
+                      totalPages={entries.totalPages}
+                      onPageChange={page => updateFilter('page', page)}
+                    />
+                  </Stack>
+                </Scrollbar>
+              </Box>
             )}
           </WithQuery>
         </ContentWrapperWithSidebar>
       </LayoutWithSidebar>
-    </>
+    </DndProvider>
   )
 }
 

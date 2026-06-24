@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import { SearchInput, ViewModeSelector, toast } from '@lifeforge/ui'
+import { Flex, SearchInput, ViewModeSelector, toast } from '@lifeforge/ui'
 
+import useFilter from '@/hooks/useFilter'
 import { forgeAPI } from '@/manifest'
 
-import useFilter from '../hooks/useFilter'
 import SortBySelector from './SortBySelector'
 
 function Searchbar() {
@@ -33,7 +33,7 @@ function Searchbar() {
   }
 
   return (
-    <div className="mt-4 flex flex-col gap-2 md:flex-row">
+    <Flex direction={{ base: 'column', md: 'row' }} gap="sm" mt="md">
       <SortBySelector />
       <SearchInput
         actionButtonProps={{
@@ -42,22 +42,21 @@ function Searchbar() {
           loading: requestRandomLoading,
           variant: 'plain'
         }}
-        className="bg-bg-50"
         debounceMs={300}
         searchTarget="score"
         value={searchQuery}
         onChange={setSearchQuery}
       />
       <ViewModeSelector
-        className="bg-bg-50 hidden md:flex"
         currentMode={view}
+        display={{ base: 'none', md: 'flex' }}
         options={[
           { value: 'list', icon: 'uil:list-ul' },
           { value: 'grid', icon: 'uil:apps' }
         ]}
         onModeChange={mode => updateFilter('view', mode)}
       />
-    </div>
+    </Flex>
   )
 }
 

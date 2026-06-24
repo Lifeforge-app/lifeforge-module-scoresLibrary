@@ -100,7 +100,6 @@ function Sidebar() {
                 ) : (
                   <EmptyStateScreen
                     smaller
-                    className="h-min"
                     icon="tabler:folder-off"
                     message={{
                       id: 'collections'
@@ -128,7 +127,6 @@ function Sidebar() {
             ) : (
               <EmptyStateScreen
                 smaller
-                className="h-min"
                 icon="tabler:apps-off"
                 message={{
                   id: 'categories'
@@ -149,7 +147,6 @@ function Sidebar() {
             ) : (
               <EmptyStateScreen
                 smaller
-                className="h-min"
                 icon="tabler:user-off"
                 message={{
                   id: 'authors'

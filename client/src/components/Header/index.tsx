@@ -96,7 +96,7 @@ function Header({
               toast.done(toastId.current!)
               toastId.current = null
               queryClient.invalidateQueries({
-                queryKey: ['scoresLibrary']
+                queryKey: forgeAPI.key
               })
             }
           }

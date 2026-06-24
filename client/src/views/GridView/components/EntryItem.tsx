@@ -1,28 +1,20 @@
 import type { ScoreLibraryEntry } from '@'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
-import {
-  Card,
-  ConfirmationModal,
-  ContextMenu,
-  ContextMenuItem,
-  Icon,
-  toast,
-  useModalStore
-} from '@lifeforge/ui'
+import { Box, Card, Flex, Icon, Text, colorWithOpacity } from '@lifeforge/ui'
 
-import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
+import { useEntryDrag } from '@/hooks/useEntryDrag'
 import { forgeAPI } from '@/manifest'
 
 import AudioPlayer from '../../../components/AudioPlayer'
 import DownloadMenu from '../../../components/DownloadMenu'
+import EntryContextMenu from '../../../components/EntryContextMenu'
 
 function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
-  const { open } = useModalStore()
-  const queryClient = useQueryClient()
   const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
   const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
+  const [{ opacity, isDragging }, dragRef] = useEntryDrag(entry)
 
   const type = useMemo(() => {
     return typesQuery.data?.find(type => type.id === entry.type)
@@ -34,149 +26,123 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
     )
   }, [collectionsQuery.data, entry.collection])
 
-  const toggleFavouriteStatusMutation = useMutation(
-    forgeAPI.entries.toggleFavourite
-      .input({
-        id: entry.id
-      })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['scoresLibrary']
-          })
-        },
-        onError: () => {
-          toast.error('Failed to toggle favourite status')
-        }
-      })
-  )
-
-  const deleteMutation = useMutation(
-    forgeAPI.entries.remove
-      .input({
-        id: entry.id
-      })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['scoresLibrary']
-          })
-        },
-        onError: () => {
-          toast.error('Failed to delete entry')
-        }
-      })
-  )
-
-  const handleUpdateEntry = useCallback(() => {
-    open(ModifyEntryModal, {
-      initialData: entry
-    })
-  }, [entry])
-
-  const handleDeleteEntry = useCallback(() => {
-    open(ConfirmationModal, {
-      title: 'Delete Entry',
-      description: `Are you sure you want to delete this score for song "${entry.name}"?`,
-      confirmationPrompt: entry.name,
-      onConfirm: async () => {
-        await deleteMutation.mutateAsync(undefined)
-      }
-    })
-  }, [entry])
-
   return (
     <Card
       key={entry.id}
+      ref={node => {
+        dragRef(node)
+      }}
       as="a"
+      className={isDragging ? 'cursor-move' : ''}
       href={forgeAPI.getMedia({
         collectionId: entry.collectionId,
         recordId: entry.id,
         fieldId: entry.pdf
       })}
       rel="noreferrer"
+      style={{ opacity }}
       target="_blank"
     >
-      <div className="relative">
-        <div className="flex-center bg-bg-100 dark:bg-bg-800 relative aspect-[1/1.4142] w-full overflow-hidden rounded-md">
-          <Icon
-            className="text-bg-300 dark:text-bg-700 absolute top-1/2 left-1/2 size-16 -translate-x-1/2 -translate-y-1/2"
-            icon="tabler:file-music"
-          />
-          <img
-            key={entry.id}
-            alt=""
-            className="relative h-full object-cover object-top"
-            src={forgeAPI.getMedia({
-              collectionId: entry.collectionId,
-              recordId: entry.id,
-              fieldId: entry.thumbnail,
-              thumb: '0x512'
-            })}
-          />
-        </div>
-        <div className="bg-bg-500/80 absolute right-0 bottom-0 rounded-tl-md rounded-br-md p-1 px-2">
-          <p className="text-xs text-white">{entry.pageCount} pages</p>
-        </div>
-        <ContextMenu
-          classNames={{
-            wrapper: 'absolute right-2 top-2 shrink-0'
-          }}
+      <Box position="relative">
+        <Flex
+          centered
+          aspectRatio="1 / 1.4142"
+          bg={{ base: 'bg-100', dark: 'bg-800' }}
+          overflow="hidden"
+          position="relative"
+          r="md"
+          width="100%"
         >
-          <ContextMenuItem
-            icon={entry.isFavourite ? 'tabler:star-off' : 'tabler:star'}
-            label={entry.isFavourite ? 'Unfavourite' : 'Favourite'}
-            onClick={() => {
-              toggleFavouriteStatusMutation.mutateAsync(undefined)
+          <Box
+            asChild
+            left="50%"
+            position="absolute"
+            style={{ transform: 'translate(-50%, -50%)' }}
+            top="50%"
+          >
+            <Icon
+              color={{ base: 'bg-300', dark: 'bg-700' }}
+              icon="tabler:file-music"
+              size="4em"
+            />
+          </Box>
+          <Box
+            asChild
+            height="100%"
+            position="relative"
+            style={{
+              objectFit: 'cover',
+              objectPosition: 'top'
             }}
-          />
-          <ContextMenuItem
-            icon="tabler:pencil"
-            label="Edit"
-            onClick={handleUpdateEntry}
-          />
-          <ContextMenuItem
-            dangerous
-            icon="tabler:trash"
-            label="Delete"
-            onClick={handleDeleteEntry}
-          />
-        </ContextMenu>
-      </div>
-      <div className="mt-4 flex w-full min-w-0 items-center justify-between gap-8">
-        <div className="w-full min-w-0">
+          >
+            <img
+              key={entry.id}
+              alt=""
+              src={forgeAPI.getMedia({
+                collectionId: entry.collectionId,
+                recordId: entry.id,
+                fieldId: entry.thumbnail,
+                thumb: '0x512'
+              })}
+            />
+          </Box>
+        </Flex>
+        <Box
+          bg={colorWithOpacity('bg-500', '80%')}
+          bottom="0"
+          position="absolute"
+          px="sm"
+          py="xs"
+          rbr="sm"
+          right="0"
+          rtl="md"
+        >
+          <Text color="bg-50" size="xs" weight="medium">
+            {entry.pageCount} pages
+          </Text>
+        </Box>
+        <Box flexShrink="0" position="absolute" right="0" top="0">
+          <EntryContextMenu entry={entry} />
+        </Box>
+      </Box>
+      <Flex
+        align="center"
+        gap="2xl"
+        justify="between"
+        minWidth="0"
+        mt="md"
+        width="100%"
+      >
+        <Flex direction="column" minWidth="0" width="100%">
           {collection && (
-            <div className="mb-2 flex items-center gap-2">
-              <Icon
-                className="text-bg-500 size-4 shrink-0"
-                icon="tabler:folder"
-              />
-              <span className="text-bg-500 truncate text-sm">
+            <Flex align="center" gap="xs" mb="xs">
+              <Icon color="muted" icon="tabler:folder" size="1em" />
+              <Text truncate color="muted" size="sm">
                 {collection.name}
-              </span>
-            </div>
+              </Text>
+            </Flex>
           )}
           {type && (
-            <div className="mb-2 flex items-center gap-2">
-              <Icon className="text-bg-500 size-4 shrink-0" icon={type.icon} />
-              <span className="text-bg-500 truncate text-sm">{type.name}</span>
-            </div>
+            <Flex align="center" gap="xs" mb="xs">
+              <Icon color="muted" icon={type.icon} size="1em" />
+              <Text truncate color="muted" size="sm">
+                {type.name}
+              </Text>
+            </Flex>
           )}
-          <div className="flex items-center gap-2">
-            <h3 className="truncate text-lg font-medium">{entry.name}</h3>
-
+          <Flex align="center" gap="xs">
+            <Text truncate as="h3" size="lg" weight="medium">
+              {entry.name}
+            </Text>
             {entry.isFavourite && (
-              <Icon
-                className="size-4 shrink-0 text-yellow-500"
-                icon="tabler:star-filled"
-              />
+              <Icon color="yellow-500" icon="tabler:star-filled" size="1em" />
             )}
-          </div>
-          <p className="text-custom-500 mt-1 truncate text-sm">
+          </Flex>
+          <Text truncate color="custom-500" mt="xs" size="sm">
             {entry.author || 'Unknown'}
-          </p>
-        </div>
-        <div className="hidden items-center gap-2 sm:flex">
+          </Text>
+        </Flex>
+        <Flex align="center" display={{ base: 'none', sm: 'flex' }} gap="xs">
           <DownloadMenu entry={entry} />
           {entry.audio && (
             <AudioPlayer
@@ -187,8 +153,8 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
               })}
             />
           )}
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     </Card>
   )
 }

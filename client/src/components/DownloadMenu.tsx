@@ -8,6 +8,7 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
       <ContextMenuItem
         icon="tabler:file-text"
         label="PDF"
+        namespace={false}
         onClick={() => {
           const a = document.createElement('a')
 
@@ -22,6 +23,7 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
         <ContextMenuItem
           icon="tabler:music"
           label="Audio"
+          namespace={false}
           onClick={() => {
             const a = document.createElement('a')
 
@@ -37,6 +39,7 @@ function DownloadMenu({ entry }: { entry: ScoreLibraryEntry }) {
         <ContextMenuItem
           icon="simple-icons:musescore"
           label="Musescore"
+          namespace={false}
           onClick={() => {
             const a = document.createElement('a')
 

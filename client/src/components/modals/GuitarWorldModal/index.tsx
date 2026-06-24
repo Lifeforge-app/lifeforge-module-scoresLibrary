@@ -2,7 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import type { InferOutput } from '@lifeforge/api'
+import { useModuleTranslation } from '@lifeforge/localization'
 import {
+  Box,
   Button,
   ConfirmationModal,
   ModalHeader,
@@ -21,6 +23,7 @@ export type ScoreLibraryGuitarWorldResponse = InferOutput<
 >
 
 function GuitarWorldModal({ onClose }: { onClose: () => void }) {
+  const { t } = useModuleTranslation()
   const { open } = useModalStore()
 
   const [cookie, setCookie] = useState(
@@ -51,27 +54,28 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
   }, [finalCookie, dataQuery.data])
 
   return (
-    <div className="min-w-[50vw]">
+    <Box minWidth="50vw">
       <ModalHeader
-        actionButtonProps={
-          finalCookie
-            ? {
-                dangerous: true,
-                icon: 'tabler:cookie-off',
-                onClick: () => {
-                  open(ConfirmationModal, {
-                    title: 'Remove session cookie',
-                    description:
-                      'Are you sure you want to remove the Guitar World session cookie? You will have to re-enter it.',
-                    onConfirm: async () => {
-                      setFinalCookie('')
-                      setCookie('')
-                      localStorage.removeItem('guitarWorldCookie')
-                    }
-                  })
-                }
-              }
-            : undefined
+        headerActions={
+          finalCookie ? (
+            <Button
+              dangerous
+              icon="tabler:cookie-off"
+              variant="plain"
+              onClick={() => {
+                open(ConfirmationModal, {
+                  title: 'Remove session cookie',
+                  description:
+                    'Are you sure you want to remove the Guitar World session cookie? You will have to re-enter it.',
+                  onConfirm: async () => {
+                    setFinalCookie('')
+                    setCookie('')
+                    localStorage.removeItem('guitarWorldCookie')
+                  }
+                })
+              }}
+            />
+          ) : undefined
         }
         icon="mingcute:guitar-line"
         title="Guitar World"
@@ -81,15 +85,16 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
         <>
           <TextInput
             icon="tabler:cookie"
-            label="cookie"
-            placeholder="Cookie from Guitar World"
+            label="guitarWorld.cookie"
+            placeholder={t('inputs.guitarWorld.placeholder')}
             value={cookie}
             onChange={setCookie}
           />
           <Button
-            className="mt-4 w-full"
             icon="tabler:arrow-right"
             iconPosition="end"
+            mt="md"
+            width="100%"
             onClick={() => {
               setFinalCookie(cookie)
             }}
@@ -109,7 +114,7 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
           )}
         </WithQuery>
       )}
-    </div>
+    </Box>
   )
 }
 

@@ -43,13 +43,27 @@
     "downloadAll": "Muat Turun Semua"
   },
   "inputs": {
-    "scoreType": "Jenis Skor",
-    "cookie": "Kuki Sesi",
-    "author": "Pengarang",
-    "musicName": "Nama Muzik",
-    "collectionName": "Nama Koleksi",
-    "categoryName": "Nama Kategori",
-    "categoryIcon": "Ikon Kategori"
+    "modifyCollection": {
+      "name": "Nama Koleksi"
+    },
+    "modifyType": {
+      "name": "Nama Kategori",
+      "icon": "Ikon Kategori"
+    },
+    "modifyEntry": {
+      "name": "Nama Muzik",
+      "author": "Pengarang",
+      "type": "Jenis Skor",
+      "collection": "Koleksi"
+    },
+    "importFromMusescore": {
+      "url": "URL MuseScore",
+      "cookie": "Kuki Sesi"
+    },
+    "guitarWorld": {
+      "cookie": "Kuki",
+      "placeholder": "Kuki dari Guitar World"
+    }
   },
   "items": {
     "score": "Skor Muzik"

@@ -26,7 +26,11 @@ function UploadTabButton({
   return (
     <ContextMenu
       buttonComponent={
-        <Button className="hidden md:flex" icon="tabler:plus" tProps={tProps}>
+        <Button
+          display={{ base: 'none', md: 'flex' }}
+          icon="tabler:plus"
+          tProps={tProps}
+        >
           new
         </Button>
       }

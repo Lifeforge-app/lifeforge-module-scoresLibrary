@@ -1,28 +1,20 @@
 import type { ScoreLibraryEntry } from '@'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
-import {
-  Card,
-  ConfirmationModal,
-  ContextMenu,
-  ContextMenuItem,
-  Icon,
-  toast,
-  useModalStore
-} from '@lifeforge/ui'
+import { Card, Flex, Icon, Text } from '@lifeforge/ui'
 
-import ModifyEntryModal from '@/components/modals/ModifyEntryModal'
+import { useEntryDrag } from '@/hooks/useEntryDrag'
 import { forgeAPI } from '@/manifest'
 
 import AudioPlayer from '../../../components/AudioPlayer'
 import DownloadMenu from '../../../components/DownloadMenu'
+import EntryContextMenu from '../../../components/EntryContextMenu'
 
 function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
-  const { open } = useModalStore()
-  const queryClient = useQueryClient()
   const typesQuery = useQuery(forgeAPI.types.list.queryOptions())
   const collectionsQuery = useQuery(forgeAPI.collections.list.queryOptions())
+  const [{ opacity, isDragging }, dragRef] = useEntryDrag(entry)
 
   const type = useMemo(() => {
     return typesQuery.data?.find(type => type.id === entry.type)
@@ -34,144 +26,94 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
     )
   }, [collectionsQuery.data, entry.collection])
 
-  const toggleFavouriteStatusMutation = useMutation(
-    forgeAPI.entries.toggleFavourite
-      .input({
-        id: entry.id
-      })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['scoresLibrary']
-          })
-        },
-        onError: () => {
-          toast.error('Failed to toggle favourite status')
-        }
-      })
-  )
-
-  const deleteMutation = useMutation(
-    forgeAPI.entries.remove
-      .input({
-        id: entry.id
-      })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['scoresLibrary']
-          })
-        },
-        onError: () => {
-          toast.error('Failed to delete entry')
-        }
-      })
-  )
-
-  const handleUpdateEntry = useCallback(() => {
-    open(ModifyEntryModal, {
-      initialData: entry
-    })
-  }, [entry])
-
-  const handleDeleteEntry = useCallback(() => {
-    open(ConfirmationModal, {
-      title: 'Delete Entry',
-      description: `Are you sure you want to delete this score for song "${entry.name}"?`,
-      confirmationPrompt: entry.name,
-      onConfirm: async () => {
-        await deleteMutation.mutateAsync(undefined)
-      }
-    })
-  }, [entry])
-
   return (
     <Card
       key={entry.id}
+      ref={node => {
+        dragRef(node)
+      }}
+      align="center"
       as="a"
-      className="flex items-center justify-between gap-3"
-      href={`${import.meta.env.VITE_API_HOST}/media/${entry.collectionId}/${
-        entry.id
-      }/${entry.pdf}`}
+      className={isDragging ? 'cursor-move' : ''}
+      direction="row"
+      gap="md"
+      href={forgeAPI.getMedia({
+        collectionId: entry.collectionId,
+        recordId: entry.id,
+        fieldId: entry.pdf
+      })}
+      minWidth="0"
       rel="noreferrer"
+      style={{ opacity }}
       target="_blank"
+      width="100%"
     >
-      <div className="flex w-full min-w-0 items-center gap-5">
-        <div className="flex-center bg-bg-200 dark:bg-bg-800 w-16 overflow-hidden rounded-sm">
-          <img
-            alt=""
-            className="h-full"
-            src={forgeAPI.getMedia({
-              collectionId: entry.collectionId,
-              recordId: entry.id,
-              fieldId: entry.thumbnail,
-              thumb: '0x512'
-            })}
-          />
-        </div>
-        <div className="flex w-full min-w-0 flex-1 flex-col">
-          {type && (
-            <div className="mb-2 flex items-center gap-2">
-              <Icon className="text-bg-500 size-4 shrink-0" icon={type.icon} />
-              <span className="text-bg-500 truncate text-sm">{type.name}</span>
-            </div>
+      <Flex
+        centered
+        bg={{ base: 'bg-200', dark: 'bg-800' }}
+        r="sm"
+        style={{ width: '4rem', overflow: 'hidden' }}
+      >
+        <img
+          alt=""
+          src={forgeAPI.getMedia({
+            collectionId: entry.collectionId,
+            recordId: entry.id,
+            fieldId: entry.thumbnail,
+            thumb: '0x512'
+          })}
+          style={{ height: '100%' }}
+        />
+      </Flex>
+      <Flex direction="column" flex="1" minWidth="0" width="100%">
+        {type && (
+          <Flex align="center" gap="xs" mb="xs">
+            <Icon color="muted" icon={type.icon} size="1em" />
+            <Text truncate color="muted" size="sm">
+              {type.name}
+            </Text>
+          </Flex>
+        )}
+        <Flex align="center" gap="xs" width="100%">
+          <Text truncate as="h3" size="lg" weight="semibold">
+            {entry.name}
+          </Text>
+          {entry.isFavourite && (
+            <Icon color="yellow-500" icon="tabler:star-filled" size="1em" />
           )}
-          <div className="flex w-full items-center gap-2">
-            <h3 className="truncate text-lg font-semibold">{entry.name}</h3>
-            {entry.isFavourite && (
-              <Icon
-                className="size-4 shrink-0 text-yellow-500"
-                icon="tabler:star-filled"
-              />
-            )}
-          </div>
-          <div className="text-bg-500 mt-1 flex w-full min-w-0 items-center gap-2 text-sm font-medium whitespace-nowrap">
-            <p className="min-w-0 truncate">
-              {entry.author !== '' ? entry.author : 'Unknown'}
-            </p>
-            <Icon className="size-1" icon="tabler:circle-filled" />
-            <span>{entry.pageCount} pages</span>
-            {collection && (
-              <>
-                <Icon className="size-1" icon="tabler:circle-filled" />
-                <div className="flex items-center gap-2">
-                  <Icon className="size-4" icon="tabler:folder" />
-                  <span>{collection.name}</span>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+        </Flex>
+        <Flex align="center" gap="xs" minWidth="0" mt="xs" width="100%">
+          <Text truncate color="muted" size="sm" weight="medium">
+            {entry.author !== '' ? entry.author : 'Unknown'}
+          </Text>
+          <Icon color="muted" icon="tabler:circle-filled" size="0.25em" />
+          <Text color="muted" size="sm" weight="medium">
+            {entry.pageCount} pages
+          </Text>
+          {collection && (
+            <>
+              <Icon color="muted" icon="tabler:circle-filled" size="0.25em" />
+              <Flex align="center" gap="xs">
+                <Icon color="muted" icon="tabler:folder" size="1em" />
+                <Text color="muted" size="sm" weight="medium">
+                  {collection.name}
+                </Text>
+              </Flex>
+            </>
+          )}
+        </Flex>
+      </Flex>
       {entry.audio && (
         <AudioPlayer
-          url={`${import.meta.env.VITE_API_HOST}/media/${
-            entry.collectionId
-          }/${entry.id}/${entry.audio}`}
+          url={forgeAPI.getMedia({
+            collectionId: entry.collectionId,
+            recordId: entry.id,
+            fieldId: entry.audio
+          })}
         />
       )}
       <DownloadMenu entry={entry} />
-      <ContextMenu>
-        <ContextMenuItem
-          icon={entry.isFavourite ? 'tabler:star-off' : 'tabler:star'}
-          label={entry.isFavourite ? 'Unfavourite' : 'Favourite'}
-          shouldCloseMenuOnClick={false}
-          onClick={() => {
-            toggleFavouriteStatusMutation.mutateAsync(undefined)
-          }}
-        />
-        <ContextMenuItem
-          icon="tabler:pencil"
-          label="Edit"
-          onClick={handleUpdateEntry}
-        />
-        <ContextMenuItem
-          dangerous
-          icon="tabler:trash"
-          label="Delete"
-          onClick={handleDeleteEntry}
-        />
-      </ContextMenu>
+      <EntryContextMenu entry={entry} />
     </Card>
   )
 }

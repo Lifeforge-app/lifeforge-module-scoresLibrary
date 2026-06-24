@@ -30,7 +30,7 @@ export const processFiles = async (
 
       const file = group.pdf!
 
-      const decodedName = decodeURIComponent(file.originalname)
+      const decodedName = Buffer.from(file.originalname, 'latin1').toString('utf-8')
 
       const name = decodedName.split('.').slice(0, -1).join('.')
 

@@ -1,13 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query'
-import clsx from 'clsx'
 import { useState } from 'react'
 
 import { type SocketEvent, useSocketContext } from '@lifeforge/api'
-import { Button, Icon, toast } from '@lifeforge/ui'
+import { Button, Flex, Icon, TagChip, Text, WithDivide, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
 import type { ScoreLibraryGuitarWorldResponse } from '..'
+
+const CATEGORY_COLORS: Record<string, string> = {
+  弹唱吉他谱: '#22c55e',
+  指弹吉他谱: '#3b82f6',
+  独奏钢琴谱: '#a855f7'
+}
 
 function ScoreItem({
   entry,
@@ -83,7 +88,7 @@ function ScoreItem({
             setIsDownloading(false)
 
             queryClient.invalidateQueries({
-              queryKey: ['scoresLibrary']
+              queryKey: forgeAPI.key
             })
           }
         }
@@ -94,60 +99,66 @@ function ScoreItem({
     }
   }
 
+  const categoryColor = CATEGORY_COLORS[entry.category] || '#6b7280'
+
   return (
-    <div className="flex items-center justify-between p-4">
-      <div>
-        <p className="text-lg font-medium">
-          {entry.name}
-          {entry.subtitle !== '' && (
-            <span className="text-bg-500 text-sm"> ({entry.subtitle})</span>
-          )}
-        </p>
-        <div className="flex items-center gap-3">
-          <span
-            className={clsx(
-              'mt-2 inline-block rounded-full px-3 py-1 text-[12px] font-medium',
-              {
-                弹唱吉他谱: 'bg-green-500/20 text-green-500',
-                指弹吉他谱: 'bg-blue-500/20 text-blue-500',
-                独奏钢琴谱: 'bg-purple-500/20 text-purple-500'
-              }[entry.category as never] || 'bg-gray-500/20 text-gray-500'
+    <WithDivide key={entry.id}>
+      <Flex justify="between" p="md">
+        <Flex direction="column">
+          <Text size="lg" weight="medium">
+            {entry.name}
+            {entry.subtitle !== '' && (
+              <Text as="span" color="muted" size="sm">
+                {' '}
+                ({entry.subtitle})
+              </Text>
             )}
-          >
-            {entry.category}
-          </span>
-          <p className="text-bg-500 mt-2 flex items-center text-sm">
-            <Icon className="mr-1 size-4" icon="tabler:user" />
-            {entry.mainArtist}
-          </p>
-          <p className="text-bg-500 mt-2 flex items-center text-sm">
-            <Icon className="mr-1 size-4" icon="tabler:upload" />
-            {entry.uploader}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <Button
-          className="shrink-0"
-          icon={isAudioPlaying === true ? 'tabler:pause' : 'tabler:play'}
-          loading={isAudioPlaying === 'loading'}
-          variant="plain"
-          onClick={() => {
-            toggleMusicPlay().catch(console.error)
-          }}
-        />
-        <Button
-          className="shrink-0"
-          disabled={entry.existed}
-          icon={entry.existed ? 'tabler:check' : 'tabler:download'}
-          loading={isDownloading}
-          variant="plain"
-          onClick={() => {
-            downloadScore().catch(console.error)
-          }}
-        />
-      </div>
-    </div>
+          </Text>
+          <Flex align="center" gap="sm">
+            <TagChip
+              as="span"
+              color={categoryColor}
+              label={entry.category}
+              mt="xs"
+              size="sm"
+            />
+            <Flex align="center" mt="xs">
+              <Icon color="muted" icon="tabler:user" mr="xs" size="1em" />
+              <Text color="muted" size="sm">
+                {entry.mainArtist}
+              </Text>
+            </Flex>
+            <Flex align="center" mt="xs">
+              <Icon color="muted" icon="tabler:upload" mr="xs" size="1em" />
+              <Text color="muted" size="sm">
+                {entry.uploader}
+              </Text>
+            </Flex>
+          </Flex>
+        </Flex>
+        <Flex align="center" gap="xs">
+          <Button
+            flexShrink="0"
+            icon={isAudioPlaying === true ? 'tabler:pause' : 'tabler:play'}
+            loading={isAudioPlaying === 'loading'}
+            variant="plain"
+            onClick={() => {
+              toggleMusicPlay().catch(console.error)
+            }}
+          />
+          <Button
+            disabled={entry.existed}
+            flexShrink="0"
+            icon={entry.existed ? 'tabler:check' : 'tabler:download'}
+            loading={isDownloading}
+            variant="plain"
+            onClick={() => {
+              downloadScore().catch(console.error)
+            }}
+          />
+        </Flex>
+      </Flex>
+    </WithDivide>
   )
 }
 

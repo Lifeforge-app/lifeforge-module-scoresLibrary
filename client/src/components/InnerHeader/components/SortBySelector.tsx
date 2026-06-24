@@ -1,7 +1,7 @@
 import { useModuleTranslation } from '@lifeforge/localization'
-import { Icon, Listbox, ListboxOption } from '@lifeforge/ui'
+import { Flex, Icon, Listbox, ListboxOption, Text } from '@lifeforge/ui'
 
-import useFilter from '../hooks/useFilter'
+import useFilter from '@/hooks/useFilter'
 
 const SORT_TYPE = [
   ['tabler:clock', 'newest'],
@@ -16,25 +16,24 @@ function SortBySelector() {
 
   return (
     <Listbox
-      buttonContent={
-        <div className="flex items-center gap-2">
+      minWidth="14em"
+      renderContent={() => (
+        <Flex align="center" gap="sm" minWidth="0">
           <Icon
-            className="size-6 shrink-0"
             icon={
               SORT_TYPE.find(([, value]) => value === sort)?.[0] ??
               'tabler:clock'
             }
           />
-          <span className="w-full truncate font-medium whitespace-nowrap">
+          <Text truncate weight="medium">
             {t(
               `sortTypes.${
                 SORT_TYPE.find(([, value]) => value === sort)?.[1] ?? 'newest'
               }`
             )}
-          </span>
-        </div>
-      }
-      className="component-bg-with-hover! w-full min-w-56 md:w-min"
+          </Text>
+        </Flex>
+      )}
       value={sort}
       onChange={value => updateFilter('sort', value)}
     >

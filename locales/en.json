@@ -43,13 +43,27 @@
     "downloadAll": "Download All"
   },
   "inputs": {
-    "scoreType": "Score Type",
-    "cookie": "Session Cookie",
-    "author": "Author",
-    "musicName": "Music Name",
-    "collectionName": "Collection Name",
-    "categoryName": "Category Name",
-    "categoryIcon": "Category Icon"
+    "modifyCollection": {
+      "name": "Collection Name"
+    },
+    "modifyType": {
+      "name": "Category Name",
+      "icon": "Category Icon"
+    },
+    "modifyEntry": {
+      "name": "Music Name",
+      "author": "Author",
+      "type": "Score Type",
+      "collection": "Collection"
+    },
+    "importFromMusescore": {
+      "url": "MuseScore URL",
+      "cookie": "Session Cookie"
+    },
+    "guitarWorld": {
+      "cookie": "Cookie",
+      "placeholder": "Cookie from Guitar World"
+    }
   },
   "items": {
     "score": "Music Score"

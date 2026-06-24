@@ -30,7 +30,7 @@ function SidebarCollectionItem({
     forgeAPI.collections.remove.input({ id: data.id }).mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ['scoresLibrary']
+          queryKey: forgeAPI.key
         })
       },
       onError: () => {
@@ -77,6 +77,7 @@ function SidebarCollectionItem({
       }
       icon="tabler:folder"
       label={data.name}
+      namespace={false}
       number={data.amount}
       onCancelButtonClick={() => onSelect(null)}
       onClick={() => onSelect(data.id)}
