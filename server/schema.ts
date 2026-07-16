@@ -1,6 +1,5 @@
 import z from 'zod'
-
-import { cleanSchemas } from '@lifeforge/server-utils'
+import { cleanSchemas } from '@lifeforge/pocketbase'
 
 export const schemas = {
   entries: {
@@ -310,9 +309,7 @@ export const schemas = {
           type: 'text'
         }
       ],
-      indexes: [
-        'CREATE UNIQUE INDEX `idx_WoBZ3EWAB2` ON `scores_library__types` (`name`)'
-      ],
+      indexes: [],
       system: false
     }
   },
