@@ -56,8 +56,10 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
   return (
     <Box minWidth="50vw">
       <ModalHeader
-        headerActions={
-          finalCookie ? (
+        icon="mingcute:guitar-line"
+        title="Guitar World"
+        trailing={
+          !!finalCookie && (
             <Button
               dangerous
               icon="tabler:cookie-off"
@@ -75,10 +77,8 @@ function GuitarWorldModal({ onClose }: { onClose: () => void }) {
                 })
               }}
             />
-          ) : undefined
+          )
         }
-        icon="mingcute:guitar-line"
-        title="Guitar World"
         onClose={onClose}
       />
       {!finalCookie ? (

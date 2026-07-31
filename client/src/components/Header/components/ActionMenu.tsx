@@ -7,6 +7,7 @@ import {
 } from '@lifeforge/ui'
 
 import useFilter from '@/hooks/useFilter'
+import { ScoreView } from '@/views'
 
 const SORT_TYPE = [
   ['tabler:clock', 'newest'],
@@ -17,7 +18,7 @@ const SORT_TYPE = [
 
 function ActionMenu() {
   const { t } = useModuleTranslation()
-  const { view, sort, updateFilter } = useFilter()
+  const { sort, updateFilter } = useFilter()
 
   return (
     <Box display={{ base: 'block', md: 'none' }}>
@@ -39,19 +40,7 @@ function ActionMenu() {
         ))}
       </ContextMenuGroup>
       <SidebarDivider noMargin />
-      <ContextMenuGroup icon="tabler:eye" label={t('hamburgerMenu.viewAs')}>
-        {['grid', 'list'].map(type => (
-          <ContextMenuItem
-            key={type}
-            checked={view === type}
-            icon={type === 'grid' ? 'uil:apps' : 'uil:list-ul'}
-            label={t(`viewTypes.${type}`)}
-            onClick={() => {
-              updateFilter('view', type as 'grid' | 'list')
-            }}
-          />
-        ))}
-      </ContextMenuGroup>
+      <ScoreView.ContextMenuSelector />
     </Box>
   )
 }

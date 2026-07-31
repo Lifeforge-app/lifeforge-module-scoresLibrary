@@ -22,7 +22,7 @@ import InnerHeader from './components/InnerHeader'
 import Sidebar from './components/Sidebar'
 import GuitarWorldModal from './components/modals/GuitarWorldModal'
 import useFilter from './hooks/useFilter'
-import Views from './views'
+import Views, { ScoreView } from './views'
 
 export type ScoreLibraryEntry = InferOutput<
   typeof forgeAPI.entries.list
@@ -75,43 +75,42 @@ function ScoresLibrary() {
   }, [searchQuery, author, category, collection, sort, starred])
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Header
-        setGuitarWorldModalOpen={() => open(GuitarWorldModal, null)}
-        totalItems={entriesQuery.data?.totalItems}
-      />
-      <LayoutWithSidebar>
-        <Sidebar />
-        <ContentWrapperWithSidebar>
-          <InnerHeader totalItemsCount={entriesQuery.data?.totalItems ?? 0} />
-          <WithQuery query={entriesQuery}>
-            {entries => (
-              <Box asChild mt="lg">
-                <Scrollbar>
-                  <Stack gap="md">
-                    <Pagination
-                      page={entries.page}
-                      totalPages={entries.totalPages}
-                      onPageChange={page => updateFilter('page', page)}
-                    />
-                    <Views
-                      entries={entries.items}
-                      totalItems={entries.totalItems}
-                    />
-                    <Pagination
-                      mb="lg"
-                      page={entries.page}
-                      totalPages={entries.totalPages}
-                      onPageChange={page => updateFilter('page', page)}
-                    />
-                  </Stack>
-                </Scrollbar>
-              </Box>
-            )}
-          </WithQuery>
-        </ContentWrapperWithSidebar>
-      </LayoutWithSidebar>
-    </DndProvider>
+    <ScoreView.Root>
+      <DndProvider backend={HTML5Backend}>
+        <Header setGuitarWorldModalOpen={() => open(GuitarWorldModal, null)} />
+        <LayoutWithSidebar>
+          <Sidebar />
+          <ContentWrapperWithSidebar>
+            <InnerHeader totalItemsCount={entriesQuery.data?.totalItems ?? 0} />
+            <WithQuery query={entriesQuery}>
+              {entries => (
+                <Box asChild mt="lg">
+                  <Scrollbar>
+                    <Stack gap="md">
+                      <Pagination
+                        page={entries.page}
+                        totalPages={entries.totalPages}
+                        onPageChange={page => updateFilter('page', page)}
+                      />
+                      <Views
+                        entries={entries.items}
+                        totalItems={entries.totalItems}
+                      />
+                      <Pagination
+                        mb="lg"
+                        page={entries.page}
+                        totalPages={entries.totalPages}
+                        onPageChange={page => updateFilter('page', page)}
+                      />
+                    </Stack>
+                  </Scrollbar>
+                </Box>
+              )}
+            </WithQuery>
+          </ContentWrapperWithSidebar>
+        </LayoutWithSidebar>
+      </DndProvider>
+    </ScoreView.Root>
   )
 }
 

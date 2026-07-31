@@ -21,7 +21,6 @@ export default function useFilter() {
     sort: parseAsStringEnum(['newest', 'oldest', 'author', 'name']).withDefault(
       'newest'
     ),
-    view: parseAsStringEnum(['list', 'grid']).withDefault('grid'),
     page: parseAsInteger.withDefault(1)
   })
 

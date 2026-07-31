@@ -2,7 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
 
 import { type SocketEvent, useSocketContext } from '@lifeforge/api'
-import { FAB, ModuleHeader, toast } from '@lifeforge/ui'
+import { ContextMenu, FAB, ModuleHeader, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
@@ -10,10 +10,8 @@ import ActionMenu from './components/ActionMenu'
 import UploadTabButton from './components/UploadTabButton'
 
 function Header({
-  totalItems,
   setGuitarWorldModalOpen
 }: {
-  totalItems: number | undefined
   setGuitarWorldModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const socket = useSocketContext()
@@ -113,20 +111,17 @@ function Header({
   return (
     <>
       <ModuleHeader
-        actionButton={
-          <UploadTabButton
-            setGuitarWorldModalOpen={setGuitarWorldModalOpen}
-            uploadFiles={uploadFiles}
-          />
+        trailing={
+          <>
+            <UploadTabButton
+              setGuitarWorldModalOpen={setGuitarWorldModalOpen}
+              uploadFiles={uploadFiles}
+            />
+            <ContextMenu display={{ base: 'block', md: 'none' }}>
+              <ActionMenu />
+            </ContextMenu>
+          </>
         }
-        contextMenuProps={{
-          classNames: {
-            wrapper: 'flex md:hidden'
-          },
-          children: <ActionMenu />
-        }}
-        tips="If you want to append audio and Musescore files to your music scores, make sure to name them the same as the PDF file and upload them together."
-        totalItems={totalItems}
       />
       <FAB icon="tabler:plus" onClick={uploadFiles} />
     </>

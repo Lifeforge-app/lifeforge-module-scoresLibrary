@@ -1,14 +1,15 @@
 import { useState } from 'react'
 
-import { Flex, SearchInput, ViewModeSelector, toast } from '@lifeforge/ui'
+import { Flex, SearchInput, toast } from '@lifeforge/ui'
 
 import useFilter from '@/hooks/useFilter'
 import { forgeAPI } from '@/manifest'
+import { ScoreView } from '@/views'
 
 import SortBySelector from './SortBySelector'
 
 function Searchbar() {
-  const { searchQuery, setSearchQuery, view, updateFilter } = useFilter()
+  const { searchQuery, setSearchQuery } = useFilter()
   const [requestRandomLoading, setRequestRandomLoading] = useState(false)
 
   async function requestRandomEntry() {
@@ -47,15 +48,7 @@ function Searchbar() {
         value={searchQuery}
         onChange={setSearchQuery}
       />
-      <ViewModeSelector
-        currentMode={view}
-        display={{ base: 'none', md: 'flex' }}
-        options={[
-          { value: 'list', icon: 'uil:list-ul' },
-          { value: 'grid', icon: 'uil:apps' }
-        ]}
-        onModeChange={mode => updateFilter('view', mode)}
-      />
+      <ScoreView.Selector />
     </Flex>
   )
 }

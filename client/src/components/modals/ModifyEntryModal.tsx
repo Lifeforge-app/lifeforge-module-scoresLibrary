@@ -20,7 +20,7 @@ const schema = z.object({
   name: z.string().min(1, 'Required'),
   author: z.string().min(1, 'Required'),
   type: z.string().min(1, 'Required'),
-  collection: z.string().optional().catch('')
+  collection: z.string()
 })
 
 function ModifyEntryModal({

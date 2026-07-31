@@ -1,9 +1,29 @@
-import { EmptyStateScreen } from '@lifeforge/ui'
+import { EmptyStateScreen, createViewMode } from '@lifeforge/ui'
 
 import type { ScoreLibraryEntry } from '..'
-import useFilter from '../hooks/useFilter'
 import GridView from './GridView'
 import ListView from './ListView'
+
+const VIEWS = {
+  grid: {
+    icon: 'uil:apps',
+    component: GridView
+  },
+  list: {
+    icon: 'tabler:list',
+    component: ListView
+  }
+} as const
+
+export const ScoreView = createViewMode({
+  modes: (Object.keys(VIEWS) as (keyof typeof VIEWS)[]).map(m => ({
+    value: m,
+    icon: VIEWS[m].icon
+  })),
+  selectorProps: {
+    display: { base: 'none', md: 'flex' }
+  }
+})
 
 function Views({
   entries,
@@ -12,13 +32,6 @@ function Views({
   entries: ScoreLibraryEntry[]
   totalItems: number
 }) {
-  const { view } = useFilter()
-
-  const Component = {
-    grid: GridView,
-    list: ListView
-  }[view]
-
   if (totalItems === 0) {
     return (
       <EmptyStateScreen
@@ -30,7 +43,11 @@ function Views({
     )
   }
 
-  return <Component entries={entries} />
+  return Object.entries(VIEWS).map(([mode, { component: Component }]) => (
+    <ScoreView.When key={mode} mode={mode as keyof typeof VIEWS}>
+      <Component entries={entries} />
+    </ScoreView.When>
+  ))
 }
 
 export default Views
