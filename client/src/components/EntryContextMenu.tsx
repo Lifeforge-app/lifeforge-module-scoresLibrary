@@ -63,8 +63,8 @@ function EntryContextMenu({
     <ContextMenu>
       {children}
       <ContextMenuItem
-        icon={entry.isFavourite ? 'tabler:star-off' : 'tabler:star'}
-        label={entry.isFavourite ? 'Unfavourite' : 'Favourite'}
+        icon={entry.is_favourite ? 'tabler:star-off' : 'tabler:star'}
+        label={entry.is_favourite ? 'Unfavourite' : 'Favourite'}
         shouldCloseMenuOnClick={false}
         onClick={() => {
           toggleFavouriteStatusMutation.mutateAsync(undefined)

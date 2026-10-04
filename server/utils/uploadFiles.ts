@@ -2,7 +2,17 @@ import fs from 'fs'
 // @ts-expect-error - No types available
 import pdfPageCounter from 'pdf-page-counter'
 import pdfThumbnail from 'pdf-thumbnail'
-import { Server } from 'socket.io'
+import type { Server } from 'socket.io'
+
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
+import { type BuiltModuleSchema } from '@lifeforge/drizzle'
+import type { FileStorage, StagedFile } from '@lifeforge/file-storage'
+import type { CoreContext } from '@lifeforge/server-utils'
+
+import type { ScoresLibrarySchema } from '../forge'
+import { scoreEntries } from '../schema.drizzle'
+
+type ScoresDb = PostgresJsDatabase<BuiltModuleSchema<ScoresLibrarySchema>>
 
 let left = 0
 
@@ -11,18 +21,19 @@ export function setLeft(value: number) {
 }
 
 export const processFiles = async (
-  pb: any,
+  db: ScoresDb,
+  storage: FileStorage,
   groups: Record<
     string,
     {
-      pdf: any | null
-      mscz: any | null
-      mp3: any | null
+      pdf: StagedFile | null
+      mscz: StagedFile | null
+      mp3: StagedFile | null
     }
   >,
   io: Server,
   taskId: string,
-  tasks: any
+  tasks: CoreContext['tasks']
 ) => {
   for (let groupIdx = 0; groupIdx < Object.keys(groups).length; groupIdx++) {
     try {
@@ -30,13 +41,14 @@ export const processFiles = async (
 
       const file = group.pdf!
 
-      const decodedName = Buffer.from(file.originalname, 'latin1').toString('utf-8')
+      const decodedName = Buffer.from(
+        file.originalName,
+        'latin1'
+      ).toString('utf-8')
 
       const name = decodedName.split('.').slice(0, -1).join('.')
 
-      const path = file.path
-
-      const buffer = fs.readFileSync(path)
+      const buffer = await file.read()
 
       const thumbnail = await pdfThumbnail(buffer, {
         compress: {
@@ -52,39 +64,36 @@ export const processFiles = async (
         .once('close', async () => {
           const thumbnailBuffer = fs.readFileSync(`medium/${decodedName}.jpg`)
 
-          const otherFiles: {
-            audio: File | null
-            musescore: File | null
-          } = {
-            audio: null,
-            musescore: null
-          }
+          const pdfRef = await storage.save({ file })
 
-          if (group.mscz) {
-            otherFiles.musescore = new File(
-              [fs.readFileSync(group.mscz.path)],
-              group.mscz.originalname
-            )
-          }
+          const thumbnailRef = await storage.save({
+            file: {
+              buffer: thumbnailBuffer,
+              originalName: `${decodedName}.jpeg`,
+              mimeType: 'image/jpeg'
+            },
+            thumbs: ['0x512']
+          })
 
-          if (group.mp3) {
-            otherFiles.audio = new File(
-              [fs.readFileSync(group.mp3.path)],
-              group.mp3.originalname
-            )
-          }
+          const audioRef = group.mp3
+            ? await storage.save({ file: group.mp3 })
+            : null
 
-          await pb.create
-            .collection('entries')
-            .data({
-              name,
-              thumbnail: new File([thumbnailBuffer], `${decodedName}.jpeg`),
-              author: '',
-              pdf: new File([buffer], decodedName),
-              pageCount: numpages,
-              ...otherFiles
-            })
-            .execute()
+          const musescoreRef = group.mscz
+            ? await storage.save({ file: group.mscz })
+            : null
+
+          await db.insert(scoreEntries).values({
+            name,
+            author: '',
+            page_count: String(numpages),
+            pdf: pdfRef?.key ?? '',
+            thumbnail: thumbnailRef?.key ?? '',
+            audio: audioRef?.key ?? '',
+            musescore: musescoreRef?.key ?? ''
+          })
+
+          fs.unlinkSync(`medium/${decodedName}.jpg`)
 
           if (!(tasks.global[taskId].progress instanceof Object)) {
             return

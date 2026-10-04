@@ -1,8 +1,31 @@
+import {
+  and,
+  asc,
+  count,
+  desc,
+  eq,
+  ilike,
+  isNull,
+  or,
+  sql
+} from 'drizzle-orm'
+import { createSelectSchema } from 'drizzle-orm/zod'
 import z from 'zod'
 
+import type { StagedFile } from '@lifeforge/file-storage'
+
 import forge from '../forge'
-import scoresLibrarySchemas from '../schema'
+import { scoreEntries, scoreTypes } from '../schema.drizzle'
 import { processFiles, setLeft } from '../utils/uploadFiles'
+
+const entryDto = createSelectSchema(scoreEntries)
+
+const typeAggregateDto = z.object({
+  id: z.string(),
+  name: z.string(),
+  icon: z.string(),
+  amount: z.number()
+})
 
 export const sidebarData = forge
   .query({
@@ -11,47 +34,41 @@ export const sidebarData = forge
       OK: z.object({
         total: z.number(),
         favourites: z.number(),
-        types: z.array(scoresLibrarySchemas.types_aggregated),
+        types: z.array(typeAggregateDto),
         authors: z.record(z.string(), z.number())
       })
     }
   })
-  .callback(async ({ pb, response }) => {
-    const allScores = await pb.getList
-      .collection('entries')
-      .page(1)
-      .perPage(1)
-      .execute()
+  .callback(async ({ db, response }) => {
+    const [totalRow] = await db.select({ value: count() }).from(scoreEntries)
 
-    const favourites = await pb.getList
-      .collection('entries')
-      .page(1)
-      .perPage(1)
-      .filter([
-        {
-          field: 'isFavourite',
-          operator: '=',
-          value: true
-        }
-      ])
-      .execute()
+    const [favouritesRow] = await db
+      .select({ value: count() })
+      .from(scoreEntries)
+      .where(eq(scoreEntries.is_favourite, true))
 
-    const allAuthors = await pb.getFullList
-      .collection('authors_aggregated')
-      .execute()
+    const typeRows = await db
+      .select({
+        id: scoreTypes.id,
+        name: scoreTypes.name,
+        icon: scoreTypes.icon,
+        amount: count(scoreEntries.id)
+      })
+      .from(scoreTypes)
+      .leftJoin(scoreEntries, eq(scoreEntries.type, scoreTypes.id))
+      .groupBy(scoreTypes.id)
+      .orderBy(asc(count(scoreEntries.id)), asc(scoreTypes.name))
 
-    const allTypes = await pb.getFullList
-      .collection('types_aggregated')
-      .sort(['amount', 'name'])
-      .execute()
+    const authorRows = await db
+      .select({ name: scoreEntries.author, amount: count() })
+      .from(scoreEntries)
+      .groupBy(scoreEntries.author)
 
     return response.ok({
-      total: allScores.totalItems,
-      favourites: favourites.totalItems,
-      types: allTypes,
-      authors: Object.fromEntries(
-        allAuthors.map(author => [author.name, author.amount])
-      )
+      total: totalRow.value,
+      favourites: favouritesRow.value,
+      types: typeRows,
+      authors: Object.fromEntries(authorRows.map(a => [a.name, a.amount]))
     })
   })
 
@@ -74,7 +91,7 @@ export const list = forge
     },
     output: {
       OK: z.object({
-        items: z.array(scoresLibrarySchemas.entries),
+        items: z.array(entryDto),
         page: z.number(),
         perPage: z.number(),
         totalItems: z.number(),
@@ -84,85 +101,84 @@ export const list = forge
   })
   .callback(
     async ({
-      pb,
+      db,
       query: { page, query = '', category, author, collection, starred, sort },
       response
     }) => {
       const parsedPage = parseInt(page ?? '1', 10) || 1
 
+      const perPage = 20
+
       const parsedStarred = starred === 'true'
 
-      return response.ok(
-        await pb.getList
-          .collection('entries')
-          .page(parsedPage)
-          .perPage(20)
-          .filter([
-            {
-              combination: '||',
-              filters: [
-                {
-                  field: 'name',
-                  operator: '~',
-                  value: query || ''
-                },
-                {
-                  field: 'author',
-                  operator: '~',
-                  value: query || ''
-                }
-              ]
-            },
-            ...(category
-              ? ([
-                  {
-                    field: 'type',
-                    operator: '=',
-                    value: category === 'uncategorized' ? '' : category
-                  }
-                ] as const)
-              : []),
-            ...(author
-              ? ([
-                  {
-                    field: 'author',
-                    operator: '=',
-                    value: author === '[na]' ? '' : author
-                  }
-                ] as const)
-              : []),
-            ...(collection
-              ? ([
-                  {
-                    field: 'collection',
-                    operator: '=',
-                    value: collection
-                  }
-                ] as const)
-              : []),
-            ...(parsedStarred
-              ? ([
-                  {
-                    field: 'isFavourite',
-                    operator: '=',
-                    value: parsedStarred
-                  }
-                ] as const)
-              : [])
-          ])
-          .sort([
-            '-isFavourite',
-            (
-              {
-                name: 'name',
-                author: 'author',
-                newest: '-created',
-                oldest: 'created'
-              } as const
-            )[sort]
-          ])
-          .execute()
-      )
+      const conditions = []
+
+      if (query) {
+        conditions.push(
+          or(
+            ilike(scoreEntries.name, `%${query}%`),
+            ilike(scoreEntries.author, `%${query}%`)
+          )
+        )
+      }
+
+      if (category) {
+        conditions.push(
+          category === 'uncategorized'
+            ? isNull(scoreEntries.type)
+            : eq(scoreEntries.type, category)
+        )
+      }
+
+      if (author) {
+        conditions.push(
+          eq(scoreEntries.author, author === '[na]' ? '' : author)
+        )
+      }
+
+      if (collection) {
+        conditions.push(eq(scoreEntries.collection, collection))
+      }
+
+      if (parsedStarred) {
+        conditions.push(eq(scoreEntries.is_favourite, true))
+      }
+
+      const where = conditions.length > 0 ? and(...conditions) : undefined
+
+      const orderBy = [
+        desc(scoreEntries.is_favourite),
+        sort === 'name'
+          ? asc(scoreEntries.name)
+          : sort === 'author'
+            ? asc(scoreEntries.author)
+            : sort === 'oldest'
+              ? asc(scoreEntries.created)
+              : desc(scoreEntries.created)
+      ]
+
+      const items = await db
+        .select()
+        .from(scoreEntries)
+        .where(where)
+        .orderBy(...orderBy)
+        .limit(perPage)
+        .offset((parsedPage - 1) * perPage)
+
+      const [totalRow] = await db
+        .select({ value: count() })
+        .from(scoreEntries)
+        .where(where)
+
+      const totalItems = totalRow.value
+
+      return response.ok({
+        items,
+        page: parsedPage,
+        perPage,
+        totalItems,
+        totalPages: Math.ceil(totalItems / perPage)
+      })
     }
   )
 
@@ -170,13 +186,21 @@ export const random = forge
   .query({
     description: 'Get a random score',
     output: {
-      OK: scoresLibrarySchemas.entries
+      OK: entryDto
     }
   })
-  .callback(async ({ pb, response }) => {
-    const allScores = await pb.getFullList.collection('entries').execute()
+  .callback(async ({ db, response }) => {
+    const [row] = await db
+      .select()
+      .from(scoreEntries)
+      .orderBy(sql`random()`)
+      .limit(1)
 
-    return response.ok(allScores[Math.floor(Math.random() * allScores.length)])
+    if (!row) {
+      return response.notFound()
+    }
+
+    return response.ok(row)
   })
 
 export const upload = forge
@@ -189,143 +213,148 @@ export const upload = forge
       }
     },
     output: {
-      OK: z.string(),
-      BAD_REQUEST: z.string()
+      OK: z.string()
     }
   })
-  .callback(async ({ io, pb, media: { files }, core: { tasks }, response }) => {
-    if (!files) {
-      return response.badRequest('No files provided')
-    }
-
-    const taskId = tasks.add(io, {
-      module: 'scoresLibrary',
-      description: 'Uploading music scores from local',
-      progress: {
-        left: 0,
-        total: 0
-      },
-      status: 'pending'
-    })
-
-    ;(async () => {
-      try {
-        let groups: Record<
-          string,
-          {
-            pdf: any | null
-            mscz: any | null
-            mp3: any | null
-          }
-        > = {}
-
-        for (const file of files) {
-          const originalName = Buffer.from(
-            file.originalname,
-            'latin1'
-          ).toString('utf-8')
-          const extension = originalName.split('.').pop()
-
-          if (!extension || !['mscz', 'mp3', 'pdf'].includes(extension))
-            continue
-
-          const name = originalName.split('.').slice(0, -1).join('.')
-
-          if (!groups[name]) {
-            groups[name] = {
-              pdf: null,
-              mscz: null,
-              mp3: null
-            }
-          }
-
-          groups[name][extension as 'pdf' | 'mscz' | 'mp3'] = file
-        }
-
-        for (const group of Object.values(groups)) {
-          if (group.pdf) continue
-        }
-
-        groups = Object.fromEntries(
-          Object.entries(groups).filter(([_, group]) => group.pdf)
-        )
-
-        tasks.update(io, taskId, {
-          status: 'running',
-          progress: {
-            left: Object.keys(groups).length,
-            total: Object.keys(groups).length
-          }
-        })
-
-        setLeft(Object.keys(groups).length)
-
-        processFiles(pb, groups, io, taskId, tasks)
-
-        return { status: 'success' }
-      } catch (error) {
-        tasks.update(io, taskId, {
-          status: 'failed',
-          error: error instanceof Error ? error.message : 'Unknown error'
-        })
-
-        return { status: 'error', message: 'Failed to process files' }
+  .callback(
+    async ({ db, io, media: { files }, core: { tasks, storage }, response }) => {
+      if (!files || files.length === 0) {
+        return response.badRequest('No files provided')
       }
-    })()
 
-    return response.ok(taskId)
-  })
+      const taskId = tasks.add(io, {
+        module: 'scoresLibrary',
+        description: 'Uploading music scores from local',
+        progress: {
+          left: 0,
+          total: 0
+        },
+        status: 'pending'
+      })
+
+      ;(async () => {
+        try {
+          let groups: Record<
+            string,
+            {
+              pdf: StagedFile | null
+              mscz: StagedFile | null
+              mp3: StagedFile | null
+            }
+          > = {}
+
+          for (const file of files) {
+            const originalName = Buffer.from(
+              file.originalName,
+              'latin1'
+            ).toString('utf-8')
+
+            const extension = originalName.split('.').pop()
+
+            if (!extension || !['mscz', 'mp3', 'pdf'].includes(extension)) {
+              continue
+            }
+
+            const name = originalName.split('.').slice(0, -1).join('.')
+
+            if (!groups[name]) {
+              groups[name] = {
+                pdf: null,
+                mscz: null,
+                mp3: null
+              }
+            }
+
+            groups[name][extension as 'pdf' | 'mscz' | 'mp3'] = file
+          }
+
+          groups = Object.fromEntries(
+            Object.entries(groups).filter(([, group]) => group.pdf)
+          )
+
+          tasks.update(io, taskId, {
+            status: 'running',
+            progress: {
+              left: Object.keys(groups).length,
+              total: Object.keys(groups).length
+            }
+          })
+
+          setLeft(Object.keys(groups).length)
+
+          processFiles(db, storage, groups, io, taskId, tasks)
+        } catch (error) {
+          tasks.update(io, taskId, {
+            status: 'failed',
+            error: error instanceof Error ? error.message : 'Unknown error'
+          })
+        }
+      })()
+
+      return response.ok(taskId)
+    }
+  )
 
 export const update = forge
   .mutation({
     description: 'Update score details',
     input: {
       query: z.object({
-        id: z.string()
+        id: forge.existsIn(z.string(), scoreEntries)
       }),
-      body: scoresLibrarySchemas.entries
-        .pick({
-          name: true,
-          author: true,
-          type: true
-        })
-        .extend({
-          collection: z.string().optional()
-        })
-    },
-    existenceCheck: {
-      query: { id: 'entries' },
-      body: { collection: '[collections]' }
+      body: z.object({
+        name: z.string(),
+        author: z.string(),
+        type: z.string().optional(),
+        collection: z.string().optional()
+      })
     },
     output: {
-      OK: scoresLibrarySchemas.entries,
-      NOT_FOUND: true
+      OK: entryDto
     }
   })
-  .callback(async ({ pb, query: { id }, body, response }) =>
-    response.ok(
-      await pb.update.collection('entries').id(id).data(body).execute()
-    )
-  )
+  .callback(async ({ db, query: { id }, body, response }) => {
+    const [updated] = await db
+      .update(scoreEntries)
+      .set({
+        name: body.name,
+        author: body.author,
+        type: body.type || null,
+        collection: body.collection || null,
+        updated: new Date()
+      })
+      .where(eq(scoreEntries.id, id))
+      .returning()
+
+    return response.ok(updated)
+  })
 
 export const remove = forge
   .mutation({
     description: 'Delete a score',
     input: {
       query: z.object({
-        id: z.string()
+        id: forge.existsIn(z.string(), scoreEntries)
       })
     },
-    existenceCheck: {
-      query: { id: 'entries' }
-    },
     output: {
-      NO_CONTENT: true,
-      NOT_FOUND: true
+      NO_CONTENT: true
     }
   })
-  .callback(async ({ pb, query: { id }, response }) => {
-    await pb.delete.collection('entries').id(id).execute()
+  .callback(async ({ db, query: { id }, core, response }) => {
+    const entry = await db.query.entries.findFirst({ where: { id } })
+
+    if (!entry) {
+      return response.notFound()
+    }
+
+    for (const key of [entry.thumbnail, entry.pdf, entry.audio, entry.musescore]) {
+      if (key) {
+        await core.storage.delete(key)
+      }
+    }
+
+    await db.delete(scoreEntries).where(eq(scoreEntries.id, id))
 
     return response.noContent()
   })
@@ -335,29 +364,23 @@ export const toggleFavourite = forge
     description: 'Toggle favourite status',
     input: {
       query: z.object({
-        id: z.string()
+        id: forge.existsIn(z.string(), scoreEntries)
       })
     },
-    existenceCheck: {
-      query: { id: 'entries' }
-    },
     output: {
-      OK: scoresLibrarySchemas.entries,
-      NOT_FOUND: true
+      OK: entryDto
     }
   })
-  .callback(async ({ pb, query: { id }, response }) => {
-    const entry = await pb.getOne.collection('entries').id(id).execute()
+  .callback(async ({ db, query: { id }, response }) => {
+    const entry = (await db.query.entries.findFirst({ where: { id } }))!
 
-    return response.ok(
-      await pb.update
-        .collection('entries')
-        .id(id)
-        .data({
-          isFavourite: !entry.isFavourite
-        })
-        .execute()
-    )
+    const [updated] = await db
+      .update(scoreEntries)
+      .set({ is_favourite: !entry.is_favourite, updated: new Date() })
+      .where(eq(scoreEntries.id, id))
+      .returning()
+
+    return response.ok(updated)
   })
 
 export const cleanup = forge
@@ -377,7 +400,6 @@ export const cleanup = forge
   })
   .callback(
     async ({
-      pb,
       body: { rawName },
       core: {
         api: { fetchAI }
@@ -394,7 +416,6 @@ export const cleanup = forge
       })
 
       const result = await fetchAI({
-        pb,
         provider: 'deepseek',
         model: 'deepseek-v4-flash',
         messages: [

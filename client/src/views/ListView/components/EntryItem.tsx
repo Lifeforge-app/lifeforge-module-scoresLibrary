@@ -37,11 +37,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
       className={isDragging ? 'cursor-move' : ''}
       direction="row"
       gap="md"
-      href={forgeAPI.getMedia({
-        collectionId: entry.collectionId,
-        recordId: entry.id,
-        fieldId: entry.pdf
-      })}
+      href={forgeAPI.getMedia({ key: entry.pdf })}
       minWidth="0"
       rel="noreferrer"
       style={{ opacity }}
@@ -57,9 +53,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
         <img
           alt=""
           src={forgeAPI.getMedia({
-            collectionId: entry.collectionId,
-            recordId: entry.id,
-            fieldId: entry.thumbnail,
+            key: entry.thumbnail,
             thumb: '0x512'
           })}
           style={{ height: '100%' }}
@@ -78,7 +72,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
           <Text truncate as="h3" size="lg" weight="semibold">
             {entry.name}
           </Text>
-          {entry.isFavourite && (
+          {entry.is_favourite && (
             <Icon color="yellow-500" icon="tabler:star-filled" size="1em" />
           )}
         </Flex>
@@ -88,7 +82,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
           </Text>
           <Icon color="muted" icon="tabler:circle-filled" size="0.25em" />
           <Text color="muted" size="sm" weight="medium">
-            {entry.pageCount} pages
+            {entry.page_count} pages
           </Text>
           {collection && (
             <>
@@ -105,11 +99,7 @@ function EntryItem({ entry }: { entry: ScoreLibraryEntry }) {
       </Flex>
       {entry.audio && (
         <AudioPlayer
-          url={forgeAPI.getMedia({
-            collectionId: entry.collectionId,
-            recordId: entry.id,
-            fieldId: entry.audio
-          })}
+          url={forgeAPI.getMedia({ key: entry.audio })}
         />
       )}
       <DownloadMenu entry={entry} />

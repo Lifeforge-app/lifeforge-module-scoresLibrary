@@ -101,13 +101,27 @@ export const contract = {
               "items": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
                   "name": {
                     "type": "string"
                   },
                   "type": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
-                  "pageCount": {
+                  "page_count": {
                     "type": "string"
                   },
                   "thumbnail": {
@@ -125,48 +139,57 @@ export const contract = {
                   "musescore": {
                     "type": "string"
                   },
-                  "isFavourite": {
+                  "is_favourite": {
                     "type": "boolean"
                   },
                   "collection": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uuid",
+                        "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "guitar_world_id": {
-                    "type": "number"
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "maximum": 2147483647
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   },
                   "created": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "date-time"
                   },
                   "updated": {
-                    "type": "string"
-                  },
-                  "id": {
-                    "type": "string"
-                  },
-                  "collectionId": {
-                    "type": "string"
-                  },
-                  "collectionName": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "date-time"
                   }
                 },
                 "required": [
+                  "id",
                   "name",
                   "type",
-                  "pageCount",
+                  "page_count",
                   "thumbnail",
                   "author",
                   "pdf",
                   "audio",
                   "musescore",
-                  "isFavourite",
+                  "is_favourite",
                   "collection",
                   "guitar_world_id",
                   "created",
-                  "updated",
-                  "id",
-                  "collectionId",
-                  "collectionName"
+                  "updated"
                 ],
                 "additionalProperties": false
               }
@@ -208,13 +231,27 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "name": {
               "type": "string"
             },
             "type": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
-            "pageCount": {
+            "page_count": {
               "type": "string"
             },
             "thumbnail": {
@@ -232,48 +269,57 @@ export const contract = {
             "musescore": {
               "type": "string"
             },
-            "isFavourite": {
+            "is_favourite": {
               "type": "boolean"
             },
             "collection": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "guitar_world_id": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "name",
             "type",
-            "pageCount",
+            "page_count",
             "thumbnail",
             "author",
             "pdf",
             "audio",
             "musescore",
-            "isFavourite",
+            "is_favourite",
             "collection",
             "guitar_world_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
         }
@@ -302,8 +348,7 @@ export const contract = {
         }
       },
       "output": {
-        "NO_CONTENT": true,
-        "NOT_FOUND": true
+        "NO_CONTENT": true
       }
     },
     "sidebarData": {
@@ -330,6 +375,9 @@ export const contract = {
               "items": {
                 "type": "object",
                 "properties": {
+                  "id": {
+                    "type": "string"
+                  },
                   "name": {
                     "type": "string"
                   },
@@ -338,24 +386,13 @@ export const contract = {
                   },
                   "amount": {
                     "type": "number"
-                  },
-                  "id": {
-                    "type": "string"
-                  },
-                  "collectionId": {
-                    "type": "string"
-                  },
-                  "collectionName": {
-                    "type": "string"
                   }
                 },
                 "required": [
+                  "id",
                   "name",
                   "icon",
-                  "amount",
-                  "id",
-                  "collectionId",
-                  "collectionName"
+                  "amount"
                 ],
                 "additionalProperties": false
               }
@@ -404,13 +441,27 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "name": {
               "type": "string"
             },
             "type": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
-            "pageCount": {
+            "page_count": {
               "type": "string"
             },
             "thumbnail": {
@@ -428,52 +479,60 @@ export const contract = {
             "musescore": {
               "type": "string"
             },
-            "isFavourite": {
+            "is_favourite": {
               "type": "boolean"
             },
             "collection": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "guitar_world_id": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "name",
             "type",
-            "pageCount",
+            "page_count",
             "thumbnail",
             "author",
             "pdf",
             "audio",
             "musescore",
-            "isFavourite",
+            "is_favourite",
             "collection",
             "guitar_world_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
-        },
-        "NOT_FOUND": true
+        }
       }
     },
     "update": {
@@ -516,8 +575,7 @@ export const contract = {
           },
           "required": [
             "name",
-            "author",
-            "type"
+            "author"
           ],
           "additionalProperties": false
         }
@@ -527,13 +585,27 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "name": {
               "type": "string"
             },
             "type": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
-            "pageCount": {
+            "page_count": {
               "type": "string"
             },
             "thumbnail": {
@@ -551,52 +623,60 @@ export const contract = {
             "musescore": {
               "type": "string"
             },
-            "isFavourite": {
+            "is_favourite": {
               "type": "boolean"
             },
             "collection": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "guitar_world_id": {
-              "type": "number"
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                },
+                {
+                  "type": "null"
+                }
+              ]
             },
             "created": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "updated": {
-              "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             }
           },
           "required": [
+            "id",
             "name",
             "type",
-            "pageCount",
+            "page_count",
             "thumbnail",
             "author",
             "pdf",
             "audio",
             "musescore",
-            "isFavourite",
+            "is_favourite",
             "collection",
             "guitar_world_id",
             "created",
-            "updated",
-            "id",
-            "collectionId",
-            "collectionName"
+            "updated"
           ],
           "additionalProperties": false
-        },
-        "NOT_FOUND": true
+        }
       }
     },
     "upload": {
@@ -614,10 +694,6 @@ export const contract = {
       "input": {},
       "output": {
         "OK": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "string"
-        },
-        "BAD_REQUEST": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "string"
         }
@@ -669,10 +745,6 @@ export const contract = {
       },
       "output": {
         "OK": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "type": "string"
-        },
-        "BAD_REQUEST": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "string"
         }
@@ -802,28 +874,22 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "name": {
               "type": "string"
             },
             "icon": {
               "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
             }
           },
           "required": [
-            "name",
-            "icon",
             "id",
-            "collectionId",
-            "collectionName"
+            "name",
+            "icon"
           ],
           "additionalProperties": false
         }
@@ -844,6 +910,9 @@ export const contract = {
           "items": {
             "type": "object",
             "properties": {
+              "id": {
+                "type": "string"
+              },
               "name": {
                 "type": "string"
               },
@@ -852,24 +921,13 @@ export const contract = {
               },
               "amount": {
                 "type": "number"
-              },
-              "id": {
-                "type": "string"
-              },
-              "collectionId": {
-                "type": "string"
-              },
-              "collectionName": {
-                "type": "string"
               }
             },
             "required": [
+              "id",
               "name",
               "icon",
-              "amount",
-              "id",
-              "collectionId",
-              "collectionName"
+              "amount"
             ],
             "additionalProperties": false
           }
@@ -899,8 +957,7 @@ export const contract = {
         }
       },
       "output": {
-        "NO_CONTENT": true,
-        "NOT_FOUND": true
+        "NO_CONTENT": true
       }
     },
     "update": {
@@ -947,32 +1004,25 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
             "name": {
               "type": "string"
             },
             "icon": {
               "type": "string"
-            },
-            "id": {
-              "type": "string"
-            },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
-              "type": "string"
             }
           },
           "required": [
-            "name",
-            "icon",
             "id",
-            "collectionId",
-            "collectionName"
+            "name",
+            "icon"
           ],
           "additionalProperties": false
-        },
-        "NOT_FOUND": true
+        }
       }
     }
   },
@@ -1004,24 +1054,18 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
-            "name": {
-              "type": "string"
-            },
             "id": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
             },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
+            "name": {
               "type": "string"
             }
           },
           "required": [
-            "name",
             "id",
-            "collectionId",
-            "collectionName"
+            "name"
           ],
           "additionalProperties": false
         }
@@ -1042,28 +1086,20 @@ export const contract = {
           "items": {
             "type": "object",
             "properties": {
+              "id": {
+                "type": "string"
+              },
               "name": {
                 "type": "string"
               },
               "amount": {
                 "type": "number"
-              },
-              "id": {
-                "type": "string"
-              },
-              "collectionId": {
-                "type": "string"
-              },
-              "collectionName": {
-                "type": "string"
               }
             },
             "required": [
-              "name",
-              "amount",
               "id",
-              "collectionId",
-              "collectionName"
+              "name",
+              "amount"
             ],
             "additionalProperties": false
           }
@@ -1093,8 +1129,7 @@ export const contract = {
         }
       },
       "output": {
-        "NO_CONTENT": true,
-        "NOT_FOUND": true
+        "NO_CONTENT": true
       }
     },
     "update": {
@@ -1137,28 +1172,21 @@ export const contract = {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "type": "object",
           "properties": {
-            "name": {
-              "type": "string"
-            },
             "id": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
             },
-            "collectionId": {
-              "type": "string"
-            },
-            "collectionName": {
+            "name": {
               "type": "string"
             }
           },
           "required": [
-            "name",
             "id",
-            "collectionId",
-            "collectionName"
+            "name"
           ],
           "additionalProperties": false
-        },
-        "NOT_FOUND": true
+        }
       }
     }
   }

@@ -18,11 +18,7 @@ function Searchbar() {
     try {
       const entry = await forgeAPI.entries.random.query()
 
-      const url = forgeAPI.getMedia({
-        collectionId: entry.collectionId,
-        recordId: entry.id,
-        fieldId: entry.pdf
-      })
+      const url = forgeAPI.getMedia({ key: entry.pdf })
 
       window.open(url, '_blank')
       setRequestRandomLoading(false)

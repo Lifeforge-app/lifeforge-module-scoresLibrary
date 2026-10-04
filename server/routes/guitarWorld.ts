@@ -1,9 +1,11 @@
+import { inArray } from 'drizzle-orm'
 import fs from 'fs'
 import PDFDocument from 'pdfkit'
 import sharp from 'sharp'
 import z from 'zod'
 
 import forge from '../forge'
+import { scoreEntries } from '../schema.drizzle'
 
 const GuitarWorldTabSchema = z.object({
   id: z.number(),
@@ -33,7 +35,7 @@ export const list = forge
       })
     }
   })
-  .callback(async ({ pb, query: { cookie, page }, response }) => {
+  .callback(async ({ db, query: { cookie, page }, response }) => {
     const parsedPage = parseInt(page ?? '1', 10) || 1
 
     const data: {
@@ -88,19 +90,10 @@ export const list = forge
 
     const allIds = finalData.data.map(item => item.id)
 
-    const existingEntries = await pb.getFullList
-      .collection('entries')
-      .filter([
-        {
-          combination: '||',
-          filters: allIds.map(e => ({
-            field: 'guitar_world_id',
-            operator: '=',
-            value: e
-          }))
-        }
-      ])
-      .execute()
+    const existingEntries = await db
+      .select({ guitar_world_id: scoreEntries.guitar_world_id })
+      .from(scoreEntries)
+      .where(inArray(scoreEntries.guitar_world_id, allIds))
 
     for (const entry of existingEntries) {
       const index = finalData.data.findIndex(
@@ -129,16 +122,15 @@ export const download = forge
       })
     },
     output: {
-      OK: z.string(),
-      BAD_REQUEST: z.string()
+      OK: z.string()
     }
   })
   .callback(
     async ({
-      pb,
+      db,
       body: { cookie, id, name, mainArtist, audioUrl },
       io,
-      core: { tasks },
+      core: { tasks, storage },
       response
     }) => {
       if (!cookie) {
@@ -247,27 +239,46 @@ export const download = forge
               return
             }
 
-            const newEntry = await pb.create
-              .collection('entries')
-              .data({
+            const pdfRef = await storage.save({
+              file: {
+                buffer: fs.readFileSync(`./medium/${id}.pdf`),
+                originalName: `${id}.pdf`,
+                mimeType: 'application/pdf'
+              }
+            })
+
+            const thumbnailRef = await storage.save({
+              file: {
+                buffer: fs.readFileSync(`./medium/${id}/0.jpg`),
+                originalName: `${id}.jpeg`,
+                mimeType: 'image/jpeg'
+              },
+              thumbs: ['0x512']
+            })
+
+            const audioRef = audioBuffer
+              ? await storage.save({
+                  file: {
+                    buffer: Buffer.from(audioBuffer),
+                    originalName: `${id}.mp3`,
+                    mimeType: 'audio/mpeg'
+                  }
+                })
+              : null
+
+            const [newEntry] = await db
+              .insert(scoreEntries)
+              .values({
                 name,
                 author: mainArtist,
-                pageCount: images.length,
-                audio:
-                  audioBuffer &&
-                  new File([Buffer.from(audioBuffer)], `${id}.mp3`),
-                pdf: new File(
-                  [fs.readFileSync(`./medium/${id}.pdf`)],
-                  `${id}.pdf`
-                ),
-                type: '',
-                thumbnail: new File(
-                  [fs.readFileSync(`./medium/${id}/0.jpg`)],
-                  `${id}.jpeg`
-                ),
+                page_count: String(images.length),
+                audio: audioRef?.key ?? '',
+                pdf: pdfRef?.key ?? '',
+                type: null,
+                thumbnail: thumbnailRef?.key ?? '',
                 guitar_world_id: id
               })
-              .execute()
+              .returning()
 
             fs.rmSync(folder, { recursive: true })
             fs.unlinkSync(`./medium/${id}.pdf`)

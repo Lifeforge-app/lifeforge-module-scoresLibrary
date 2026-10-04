@@ -83,7 +83,10 @@ function ModifyEntryModal({
   const form = useForm({
     defaultValues: {
       ...createDefaultValues(schema),
-      ...initialData
+      name: initialData.name,
+      author: initialData.author,
+      type: initialData.type ?? '',
+      collection: initialData.collection ?? ''
     },
     resolver: zodResolver(schema)
   })
